@@ -57,7 +57,7 @@ export abstract class AbstractRepository<
     return this.repository.find(filterQuery);
   }
 
-  async findOneAndDelelte(
+  async findOneAndDelete(
     filterQuery: FindOneOptions<TEntity>,
   ): Promise<TEntity> {
     const entity = await this.repository.findOne(filterQuery);

@@ -1,7 +1,9 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -15,9 +17,10 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
         username: configService.get<string>('DATABASE_USER'),
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_DB'),
-        // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        // autoLoadEntities: true,
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        autoLoadEntities: true,
         synchronize: configService.get<boolean>('DB_SYNC', false),
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
     MongooseModule.forRootAsync({
@@ -37,4 +40,25 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+  static forFeature(options: {
+    mongooseModels?: ModelDefinition[];
+    typeormEntities?: EntityClassOrSchema[];
+  }): DynamicModule {
+    const imports = [];
+
+    if (options.mongooseModels?.length) {
+      imports.push(MongooseModule.forFeature(options.mongooseModels));
+    }
+
+    if (options.typeormEntities?.length) {
+      imports.push(TypeOrmModule.forFeature(options.typeormEntities));
+    }
+
+    return {
+      module: DatabaseModule,
+      imports,
+      exports: imports,
+    };
+  }
+}

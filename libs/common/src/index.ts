@@ -1,2 +1,6 @@
 export * from './database/database.module';
 export * from './config/config.module';
+export { AbstractRepository as TypeOrmAbstractRepository } from './database/typeorm/abstract.repository';
+export { AbstractRepository as MongooseAbstractRepository } from './database/mongoose/abstract.repository';
+export { AbstractEntity as TypeOrmAbstractEntity } from './database/typeorm/abstract.entity';
+export { AbstractDocument as MongooseAbstractDocument } from './database/mongoose/abstract.schema';
