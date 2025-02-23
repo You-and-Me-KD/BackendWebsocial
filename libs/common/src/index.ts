@@ -4,3 +4,4 @@ export { AbstractRepository as TypeOrmAbstractRepository } from './database/type
 export { AbstractRepository as MongooseAbstractRepository } from './database/mongoose/abstract.repository';
 export { AbstractEntity as TypeOrmAbstractEntity } from './database/typeorm/abstract.entity';
 export { AbstractDocument as MongooseAbstractDocument } from './database/mongoose/abstract.schema';
+export * from './logger';

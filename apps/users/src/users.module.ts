@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { DatabaseModule } from '@app/common';
+import { DatabaseModule, LoggerModule } from '@app/common';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users/entities/user.entity';
 
@@ -9,6 +9,7 @@ import { UserEntity } from './users/entities/user.entity';
   imports: [
     DatabaseModule,
     DatabaseModule.forFeature({ typeormEntities: [UserEntity] }),
+    LoggerModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],

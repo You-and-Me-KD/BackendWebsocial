@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users.module';
 import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(UsersModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useLogger(app.get(Logger));
   await app.listen(process.env.port ?? 2802);
 }
 bootstrap();
