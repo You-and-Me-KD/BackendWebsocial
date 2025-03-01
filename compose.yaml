@@ -1,12 +1,15 @@
 services:
-  # backend:
-  #   image: khiemldk/social-network
-  #   build: .
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - '${PORT}:${PORT}'
-  postgres:
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: yarn start:dev users
+    ports:
+      - '${PORT}:2802'
+    volumes:
+      - .:/usr/src/app
+  postgresdb:
     image: postgres:17-alpine
     environment:
       POSTGRES_USER: ${DATABASE_USER}
