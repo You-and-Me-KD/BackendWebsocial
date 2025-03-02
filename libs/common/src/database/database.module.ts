@@ -32,7 +32,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         const user = configService.get<string>('MONGO_USER');
         const password = configService.get<string>('MONGO_PASSWORD');
         const db = configService.get<string>('MONGO_DB');
-        const uri = `mongodb://${user}:${password}@${host}:${port}/${db}?authSource=admin`;
+        const uri = `mongodb://${user}:${password}@${host}:${port}/${db}?authSource=${db}`;
         return {
           uri,
         };
