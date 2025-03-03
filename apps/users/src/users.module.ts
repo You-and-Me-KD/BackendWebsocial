@@ -4,6 +4,8 @@ import { UsersController } from './users.controller';
 import { DatabaseModule, LoggerModule } from '@app/common';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users/entities/user.entity';
+import { APP_FILTER } from '@nestjs/core';
+import { ExceptionFilter } from '@app/common/exceptions';
 
 @Module({
   imports: [
@@ -12,6 +14,13 @@ import { UserEntity } from './users/entities/user.entity';
     LoggerModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository],
+  providers: [
+    UsersService,
+    UsersRepository,
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionFilter,
+    },
+  ],
 })
 export class UsersModule {}

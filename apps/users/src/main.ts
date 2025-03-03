@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { ExceptionFilter } from '@app/common/exceptions';
 
 async function bootstrap() {
   const app = await NestFactory.create(UsersModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
     }),
   );
   app.useLogger(app.get(Logger));
+  app.useGlobalFilters(new ExceptionFilter());
+
   await app.listen(process.env.port ?? 2802);
 }
 bootstrap();
