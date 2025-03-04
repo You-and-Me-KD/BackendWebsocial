@@ -11,6 +11,7 @@ import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
             singleLine: true,
           },
         },
+        autoLogging: false,
       },
     }),
   ],
