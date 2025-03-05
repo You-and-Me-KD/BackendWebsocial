@@ -1,4 +1,16 @@
 services:
+  auths:
+    build:
+      context: .
+      dockerfile: ./apps/auths/Dockerfile
+      target: development
+    command: yarn start:dev auths
+    env_file:
+      - ./apps/auths/.env
+    ports:
+      - '${AUTH_PORT}:2801'
+    volumes:
+      - .:/usr/src/app
   users:
     build:
       context: .
@@ -8,7 +20,7 @@ services:
     env_file:
       - ./apps/users/.env
     ports:
-      - '${PORT}:2802'
+      - '${USER_PORT}:2802'
     volumes:
       - .:/usr/src/app
     depends_on:

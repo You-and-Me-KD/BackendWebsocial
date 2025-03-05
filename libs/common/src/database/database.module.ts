@@ -1,5 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
@@ -8,7 +8,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [],
       inject: [ConfigService],
       useFactory: (configService: ConfigService): TypeOrmModuleOptions => ({
         type: configService.get<any>('DATABASE_TYPE', 'postgres'),
@@ -24,7 +24,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       }),
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const host = configService.get<string>('MONGO_HOST');
