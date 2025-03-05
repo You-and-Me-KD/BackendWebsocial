@@ -6,12 +6,13 @@ import { AuthsService } from './auths.service';
 import { ExceptionFilter, LoggerInterceptor, LoggerModule } from '@app/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
+import { AuthsController } from './auths.controller';
 
 @Module({
   imports: [
     LoggerModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: './apps/auths/.env',
       isGlobal: true,
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
@@ -29,8 +30,7 @@ import { TransformInterceptor } from '@app/common/interceptor/transform.intercep
       inject: [ConfigService],
     }),
   ],
-  controllers: [],
-
+  controllers: [AuthsController],
   providers: [
     AuthsService,
     {

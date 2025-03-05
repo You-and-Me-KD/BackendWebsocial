@@ -16,7 +16,6 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   const configServices = app.get(ConfigService);
   const port = configServices.get('PORT');
-  console.log(configServices.get('JWT_SECRET'), 'JWT_SECRET');
   await app.listen(port);
 }
 bootstrap();

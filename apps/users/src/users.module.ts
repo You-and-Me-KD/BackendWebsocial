@@ -16,7 +16,7 @@ import * as Joi from 'joi';
     DatabaseModule.forFeature({ typeormEntities: [UserEntity] }),
     LoggerModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: './apps/users/.env',
       isGlobal: true,
       validationSchema: Joi.object({
         DATABASE_TYPE: Joi.string().required(),
