@@ -6,7 +6,6 @@ import { UsersRepository } from './users.repository';
 import { UserEntity } from './users/entities/user.entity';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionFilter } from '@app/common/exception';
-import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -31,7 +30,7 @@ import * as Joi from 'joi';
         MONGO_USER: Joi.string().required(),
         MONGO_PASSWORD: Joi.string().required(),
         MONGO_DB: Joi.string().required(),
-        PORT: Joi.number(),
+        PORT: Joi.number().required(),
       }),
     }),
   ],
@@ -47,10 +46,7 @@ import * as Joi from 'joi';
       provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformInterceptor,
-    },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}

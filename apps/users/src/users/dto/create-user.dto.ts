@@ -23,7 +23,7 @@ export class CreateUserDto {
   @IsString()
   address: string;
   @IsString()
-  hashedPassword: string;
+  password: string;
   @IsString()
   description: string;
   @IsString()

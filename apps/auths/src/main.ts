@@ -3,6 +3,7 @@ import { AuthsModule } from './auths.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
+import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthsModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalInterceptors(new TransformInterceptor());
+
   app.useLogger(app.get(Logger));
   const configServices = app.get(ConfigService);
   const port = configServices.get('PORT');

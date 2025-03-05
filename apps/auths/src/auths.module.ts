@@ -5,11 +5,13 @@ import * as Joi from 'joi';
 import { AuthsService } from './auths.service';
 import { ExceptionFilter, LoggerInterceptor, LoggerModule } from '@app/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
 import { AuthsController } from './auths.controller';
+import { UsersModule } from 'apps/users/src/users.module';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
+    UsersModule,
     LoggerModule,
     ConfigModule.forRoot({
       envFilePath: './apps/auths/.env',
@@ -17,7 +19,7 @@ import { AuthsController } from './auths.controller';
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
-        PORT: Joi.number(),
+        PORT: Joi.number().required(),
       }),
     }),
     JwtModule.registerAsync({
@@ -33,6 +35,7 @@ import { AuthsController } from './auths.controller';
   controllers: [AuthsController],
   providers: [
     AuthsService,
+    LocalStrategy,
     {
       provide: APP_FILTER,
       useClass: ExceptionFilter,
@@ -40,10 +43,6 @@ import { AuthsController } from './auths.controller';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformInterceptor,
     },
   ],
 })

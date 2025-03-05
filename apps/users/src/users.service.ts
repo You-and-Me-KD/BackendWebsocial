@@ -2,14 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { UpdateUserDto } from './users/dto/update-user.dto';
 import { UsersRepository } from './users.repository';
+import { UserEntity } from './users/entities/user.entity';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     return this.usersRepository.create({
       ...createUserDto,
-      hashedPassword: 'hashedPassword',
+      hashedPassword: await bcryptjs.hash(createUserDto.password, 10),
     });
   }
 
@@ -17,8 +19,8 @@ export class UsersService {
     return this.usersRepository.find({});
   }
 
-  findOne(id: string) {
-    return this.usersRepository.findOne({ where: { id } });
+  findOne(filterQuery: Partial<UserEntity>) {
+    return this.usersRepository.findOne({ where: filterQuery });
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
