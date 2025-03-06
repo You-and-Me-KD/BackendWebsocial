@@ -9,10 +9,12 @@ import { AuthsController } from './auths.controller';
 import { UsersModule } from 'apps/users/src/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     UsersModule,
+    PassportModule,
     LoggerModule,
     ConfigModule.forRoot({
       envFilePath: './apps/auths/.env',

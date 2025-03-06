@@ -25,4 +25,11 @@ export class AuthsController {
   async getMe(@CurrentUser() user: UserEntity) {
     return user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('Authentication');
+    return { message: 'Logout successfully' };
+  }
 }
