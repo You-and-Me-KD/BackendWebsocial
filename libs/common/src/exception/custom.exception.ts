@@ -58,6 +58,15 @@ class RequestTimeoutException extends BaseException {
   }
 }
 
+class UnprocessableEntityException extends BaseException {
+  constructor(
+    message: string = ReasonPhrases.UNPROCESSABLE_ENTITY,
+    statusCode: number = HttpStatus.UNPROCESSABLE_ENTITY,
+  ) {
+    super(message, statusCode);
+  }
+}
+
 export {
   ConflictException,
   BadRequestException,
@@ -65,4 +74,5 @@ export {
   UnauthorizedException,
   ForbiddenException,
   RequestTimeoutException,
+  UnprocessableEntityException,
 };

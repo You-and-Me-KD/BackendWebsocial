@@ -6,6 +6,7 @@ import { UsersService } from 'apps/users/src/users.service';
 import { UserEntity } from 'apps/users/src/users/entities/user.entity';
 import * as bcryptjs from 'bcryptjs';
 import { Response } from 'express';
+import { TokenPayload } from './interface/token-payload.interface';
 
 @Injectable()
 export class AuthsService {
@@ -29,7 +30,7 @@ export class AuthsService {
   }
 
   async login(user: UserEntity, response: Response) {
-    const tokenPayload = { id: user.id, email: user.email };
+    const tokenPayload: TokenPayload = { id: user.id, email: user.email };
     const expires = new Date();
     expires.setSeconds(
       expires.getSeconds() +

@@ -8,6 +8,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthsController } from './auths.controller';
 import { UsersModule } from 'apps/users/src/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { LocalStrategy } from './strategies/local.strategy';
   providers: [
     AuthsService,
     LocalStrategy,
+    JwtStrategy,
     {
       provide: APP_FILTER,
       useClass: ExceptionFilter,

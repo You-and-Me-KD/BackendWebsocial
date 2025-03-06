@@ -4,9 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthsModule);
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       // Cái này dùng để white list DTO khi gửi lên, nếu fields không được khai báo trong DTO thì sẽ bị loại bỏ
