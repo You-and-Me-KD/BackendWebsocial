@@ -4,9 +4,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(UsersModule);
+  const configServices = app.get(ConfigService);
+  app.use(cookieParser());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -17,7 +21,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
 
   app.useLogger(app.get(Logger));
-  const configServices = app.get(ConfigService);
   const port = configServices.get('PORT');
   await app.listen(port);
 }

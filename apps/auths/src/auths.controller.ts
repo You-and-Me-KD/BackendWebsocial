@@ -5,6 +5,7 @@ import { AuthsService } from './auths.service';
 import { CurrentUser } from './current-user.decorator';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('auths')
 export class AuthsController {
@@ -31,5 +32,11 @@ export class AuthsController {
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('Authentication');
     return { message: 'Logout successfully' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @MessagePattern('authenticate')
+  async authenticate(@Payload() data: any) {
+    return data.user;
   }
 }

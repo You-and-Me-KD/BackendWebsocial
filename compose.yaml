@@ -8,7 +8,7 @@ services:
     env_file:
       - ./apps/auths/.env
     ports:
-      - '${AUTH_PORT}:2801'
+      - '${AUTHS_PORT}:2801'
     volumes:
       - .:/usr/src/app
     depends_on:
@@ -22,7 +22,7 @@ services:
     env_file:
       - ./apps/users/.env
     ports:
-      - '${USER_PORT}:2802'
+      - '${USERS_PORT}:2802'
     volumes:
       - .:/usr/src/app
     depends_on:

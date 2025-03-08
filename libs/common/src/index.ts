@@ -6,3 +6,4 @@ export { AbstractDocument as MongooseAbstractDocument } from './database/mongoos
 export * from './logger';
 export * from './exception';
 export * from './interceptor';
+export * from './auth';
