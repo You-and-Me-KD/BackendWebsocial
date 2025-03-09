@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'apps/users/src/users.service';
-import { UserEntity } from 'apps/users/src/users/entities/user.entity';
 import * as bcryptjs from 'bcryptjs';
 import { Response } from 'express';
 import { TokenPayload } from './interface/token-payload.interface';
+import { UserDomain } from 'apps/users/src/users';
 
 @Injectable()
 export class AuthsService {
@@ -29,7 +29,7 @@ export class AuthsService {
     return user;
   }
 
-  async login(user: UserEntity, response: Response) {
+  async login(user: UserDomain, response: Response) {
     const tokenPayload: TokenPayload = { id: user.id, email: user.email };
     const expires = new Date();
     expires.setSeconds(

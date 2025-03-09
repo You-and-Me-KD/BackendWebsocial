@@ -1,0 +1,74 @@
+import { UserDomain } from '../domain';
+import { UserEntity } from '../entities';
+
+export class UserMapper {
+  static toDomain(raw: UserEntity): UserDomain {
+    const user = new UserDomain();
+    user.id = raw.id;
+    user.firstName = raw.firstName;
+    user.lastName = raw.lastName;
+    user.userName = raw.userName;
+    user.email = raw.email;
+    user.phoneNumber = raw.phoneNumber;
+    user.language = raw.language;
+    user.address = raw.address;
+    user.description = raw.description;
+    user.tagLine = raw.tagLine;
+    user.publicEmail = raw.publicEmail;
+    user.publicWebsite = raw.publicWebsite;
+    user.birthDate = raw.birthDate;
+    user.major = raw.major;
+    user.martialStatus = raw.martialStatus;
+    user.birthPlace = raw.birthPlace;
+    user.psId = raw.psId;
+    user.xbId = raw.xbId;
+    user.level = raw.level;
+    user.exp = raw.exp;
+    user.followerCount = raw.followerCount;
+    user.followingCount = raw.followingCount;
+    user.postCount = raw.postCount;
+    user.commentCount = raw.commentCount;
+    user.visitCount = raw.visitCount;
+    user.reactCount = raw.reactCount;
+    user.createdAt = raw.createdAt;
+    user.updatedAt = raw.updatedAt;
+    return user;
+  }
+
+  static toPersistence(domain: UserDomain): UserEntity {
+    const user = new UserEntity();
+    user.id = domain.id;
+    user.firstName = domain.firstName;
+    user.lastName = domain.lastName;
+    user.userName = domain.userName;
+    user.email = domain.email;
+    user.phoneNumber = domain.phoneNumber;
+    user.language = domain.language;
+    user.address = domain.address;
+    if (domain.hashedPassword) {
+      user.hashedPassword = domain.hashedPassword;
+    }
+    user.description = domain.description;
+    user.tagLine = domain.tagLine;
+    user.publicEmail = domain.publicEmail;
+    user.publicWebsite = domain.publicWebsite;
+    user.birthDate = domain.birthDate;
+    user.major = domain.major;
+    user.martialStatus = domain.martialStatus;
+    user.birthPlace = domain.birthPlace;
+    user.psId = domain.psId;
+    user.xbId = domain.xbId;
+    user.level = domain.level;
+    user.exp = domain.exp;
+    user.followerCount = domain.followerCount;
+    user.followingCount = domain.followingCount;
+    user.postCount = domain.postCount;
+    user.commentCount = domain.commentCount;
+    user.visitCount = domain.visitCount;
+    user.reactCount = domain.reactCount;
+    user.createdAt = domain.createdAt;
+    user.updatedAt = domain.updatedAt;
+    user.deletedAt = domain.deletedAt;
+    return user;
+  }
+}

@@ -7,3 +7,4 @@ export * from './logger';
 export * from './exception';
 export * from './interceptor';
 export * from './auth';
+export * from './decorator';

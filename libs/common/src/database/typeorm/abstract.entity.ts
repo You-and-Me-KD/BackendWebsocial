@@ -19,4 +19,10 @@ export abstract class AbstractEntity {
     type: 'timestamp',
   })
   updatedAt: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    nullable: true,
+  })
+  deletedAt: Date;
 }

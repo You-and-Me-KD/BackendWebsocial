@@ -37,7 +37,7 @@ export class UserEntity extends TypeOrmAbstractEntity {
     enum: MARITIAL_ENUM,
     default: MARITIAL_ENUM.SINGLE,
   })
-  martialStatus: string;
+  martialStatus: MARITIAL_ENUM;
   @Column({ type: 'varchar', length: 255, nullable: true })
   birthPlace: string;
   @Column({ type: 'varchar', length: 255, nullable: true })

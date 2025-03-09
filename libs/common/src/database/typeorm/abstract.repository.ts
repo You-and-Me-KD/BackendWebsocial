@@ -14,20 +14,29 @@ import { AbstractEntity } from './abstract.entity';
 
 export abstract class AbstractRepository<
   TEntity extends AbstractEntity,
+  TDomain,
 > extends AbstractSorting<TEntity> {
   protected abstract readonly logger: Logger;
+  protected abstract toDomain(entity: TEntity): TDomain;
+
+  // Mapper từ Domain -> Entity (phải implement trong class con)
+  protected abstract toPersistence(domain: TDomain): TEntity;
+
   constructor(protected readonly repository: Repository<TEntity>) {
     super();
   }
 
   async create(
-    createEntity: Omit<TEntity, 'id' | 'createdAt' | 'updatedAt'>,
-  ): Promise<TEntity> {
-    const entity = this.repository.create(createEntity as DeepPartial<TEntity>);
-    return this.repository.save(entity);
+    createDomain: Omit<TDomain, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>,
+  ): Promise<TDomain> {
+    const entity = this.toPersistence(createDomain as TDomain);
+    const savedEntity = await this.repository.save(
+      entity as DeepPartial<TEntity>,
+    );
+    return this.toDomain(savedEntity);
   }
 
-  async findOne(filterQuery: FindOneOptions<TEntity>): Promise<TEntity> {
+  async findOne(filterQuery: FindOneOptions<TEntity>): Promise<TDomain> {
     const entity = await this.repository.findOne(filterQuery);
     if (!entity) {
       this.logger.warn(
@@ -35,13 +44,13 @@ export abstract class AbstractRepository<
       );
       throw new NotFoundException('Entity not found');
     }
-    return entity;
+    return this.toDomain(entity);
   }
 
   async findOneAndUpdate(
     filterQuery: FindOneOptions<TEntity>,
-    updateEntity: DeepPartial<TEntity>,
-  ): Promise<TEntity> {
+    updateDomain: DeepPartial<TDomain>,
+  ): Promise<TDomain> {
     const entity = await this.repository.findOne(filterQuery);
     if (!entity) {
       this.logger.warn(
@@ -49,17 +58,19 @@ export abstract class AbstractRepository<
       );
       throw new NotFoundException('Entity not found');
     }
-    this.repository.merge(entity, updateEntity);
-    return this.repository.save(entity);
+    this.repository.merge(entity, this.toPersistence(updateDomain as TDomain));
+    const updatedEntity = await this.repository.save(entity);
+    return this.toDomain(updatedEntity);
   }
 
-  async find(filterQuery: FindOneOptions<TEntity>): Promise<TEntity[]> {
-    return this.repository.find(filterQuery);
+  async find(filterQuery: FindOneOptions<TEntity>): Promise<TDomain[]> {
+    const entities = this.repository.find(filterQuery);
+    return entities.then((entities) => entities.map(this.toDomain));
   }
 
   async findOneAndDelete(
     filterQuery: FindOneOptions<TEntity>,
-  ): Promise<TEntity> {
+  ): Promise<TDomain> {
     const entity = await this.repository.findOne(filterQuery);
     if (!entity) {
       this.logger.warn(
@@ -67,14 +78,15 @@ export abstract class AbstractRepository<
       );
       throw new NotFoundException('Entity not found');
     }
-    return this.repository.softRemove(entity);
+    await this.repository.softRemove(entity);
+    return this.toDomain(entity);
   }
 
   async findWithPagination(
     filterQuery: FindOneOptions<TEntity>,
     sortOptions: SortOptions<TEntity>,
     paginationOptions: PaginationOptions,
-  ): Promise<[TEntity[], number]> {
+  ): Promise<[TDomain[], number]> {
     const sortingOptions = this.applySorting(sortOptions);
     const [data, totalCount] = await this.repository.findAndCount({
       ...filterQuery,
@@ -84,6 +96,6 @@ export abstract class AbstractRepository<
       take: paginationOptions.limit || 10,
       order: sortingOptions.order as FindOptionsOrder<TEntity>,
     });
-    return [data, totalCount];
+    return [data.map(this.toDomain), totalCount];
   }
 }

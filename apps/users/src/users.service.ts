@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { UpdateUserDto } from './users/dto/update-user.dto';
 import { UsersRepository } from './users.repository';
-import { UserEntity } from './users/entities/user.entity';
 import * as bcryptjs from 'bcryptjs';
 import { UnprocessableEntityException } from '@app/common';
+import { UserDomain } from './users/domain';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +36,7 @@ export class UsersService {
     return this.usersRepository.find({});
   }
 
-  findOne(filterQuery: Partial<UserEntity>) {
+  findOne(filterQuery: Partial<UserDomain>) {
     return this.usersRepository.findOne({ where: filterQuery });
   }
 

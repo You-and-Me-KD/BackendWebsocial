@@ -1,8 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserEntity } from 'apps/users/src/users/entities/user.entity';
+import { UserDomain } from 'apps/users/src/users';
 
-const getCurrentUserByContext = (context: ExecutionContext): UserEntity => {
-  console.log('CurrentUser', context.switchToHttp().getRequest().user);
+const getCurrentUserByContext = (context: ExecutionContext): UserDomain => {
   return context.switchToHttp().getRequest().user;
 };
 

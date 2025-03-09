@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
-import { UserEntity } from 'apps/users/src/users/entities/user.entity';
 import { Response } from 'express';
 import { AuthsService } from './auths.service';
-import { CurrentUser } from './current-user.decorator';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { UserDomain } from 'apps/users/src/users';
+import { CurrentUser } from '@app/common';
 
 @Controller('auths')
 export class AuthsController {
@@ -14,7 +14,7 @@ export class AuthsController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    @CurrentUser() user: UserEntity,
+    @CurrentUser() user: UserDomain,
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.authsService.login(user, response);
@@ -23,7 +23,7 @@ export class AuthsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getMe(@CurrentUser() user: UserEntity) {
+  async getMe(@CurrentUser() user: UserDomain) {
     return user;
   }
 
