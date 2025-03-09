@@ -19,7 +19,7 @@ async function bootstrap() {
       port: configServices.get('TCP_PORT'),
     },
   });
-  setupSwagger(app, 'Auths', [AuthsModule]);
+  setupSwagger(app, 'Auths', []);
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
