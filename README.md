@@ -23,7 +23,7 @@ Techstack:
 - Realtime
   Socket
 - Microservices Messaging System
-# Actually for this, i will using TCP first. After that, i will custom this for my base to use another message system
+  - Actually for this, i will using TCP first. After that, i will custom this for my base to use another message system
   - TCP
   - RabbitMQ
   - Kalfka
