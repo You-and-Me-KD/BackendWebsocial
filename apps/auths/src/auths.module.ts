@@ -24,6 +24,7 @@ import { PassportModule } from '@nestjs/passport';
         JWT_EXPIRES_IN: Joi.string().required(),
         TCP_PORT: Joi.number().required(),
         HTTP_PORT: Joi.number().required(),
+        API_PREFIX: Joi.string().default('api'),
       }),
     }),
     JwtModule.registerAsync({

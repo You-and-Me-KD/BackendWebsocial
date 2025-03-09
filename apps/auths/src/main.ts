@@ -6,10 +6,12 @@ import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
 import * as cookieParser from 'cookie-parser';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { setupSwagger } from '@app/common/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthsModule);
   const configServices = app.get(ConfigService);
+  app.setGlobalPrefix(configServices.get('API_PREFIX') || 'api');
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
@@ -17,6 +19,7 @@ async function bootstrap() {
       port: configServices.get('TCP_PORT'),
     },
   });
+  setupSwagger(app, 'Auths', [AuthsModule]);
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({

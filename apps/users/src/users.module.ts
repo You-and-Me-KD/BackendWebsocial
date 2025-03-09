@@ -33,6 +33,9 @@ import { AUTH_SERVICE } from '@app/common/constants';
         MONGO_PASSWORD: Joi.string().required(),
         MONGO_DB: Joi.string().required(),
         PORT: Joi.number().required(),
+        AUTH_HOST: Joi.string().required(),
+        AUTH_PORT: Joi.number().required(),
+        API_PREFIX: Joi.string().default('api'),
       }),
     }),
     ClientsModule.registerAsync([

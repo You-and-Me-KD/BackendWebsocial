@@ -5912,6 +5912,20 @@ swagger-ui-dist@5.19.0:
   dependencies:
     "@scarf/scarf" "=1.4.0"
 
+swagger-ui-dist@>=5.0.0:
+  version "5.20.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-5.20.0.tgz#b14d5e2bd0ffab2179de221288ee366a5ec5fcf1"
+  integrity sha512-V5pozVTZxivdoQq/SQWxj3A4cOu5opk9MEbcZANX3Pj8X8xCrD1QCtBT7744Pz9msOvt0nnmy9JvM/9PGonCdg==
+  dependencies:
+    "@scarf/scarf" "=1.4.0"
+
+swagger-ui-express@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-5.0.1.tgz#fb8c1b781d2793a6bd2f8a205a3f4bd6fa020dd8"
+  integrity sha512-SrNU3RiBGTLLmFU8GIJdOdanJTl4TOmT27tt3bWWHppqYmAZ6IDuEuBvMU6nZq0zLEe6b/1rACXCgLZqO6ZfrA==
+  dependencies:
+    swagger-ui-dist ">=5.0.0"
+
 symbol-observable@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-4.0.0.tgz#5b425f192279e87f2f9b937ac8540d1984b39205"
