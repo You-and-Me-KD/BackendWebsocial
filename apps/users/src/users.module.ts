@@ -3,13 +3,13 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { DatabaseModule, LoggerInterceptor, LoggerModule } from '@app/common';
 import { UsersRepository } from './users.repository';
-import { UserEntity } from './users/entities/user.entity';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionFilter } from '@app/common/exception';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/constants';
+import { UserEntity } from './entities';
 
 @Module({
   imports: [

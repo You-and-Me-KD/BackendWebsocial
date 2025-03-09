@@ -1,11 +1,11 @@
-import { GetUserDto } from './users/dto/get-user.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './users/dto/create-user.dto';
-import { UpdateUserDto } from './users/dto/update-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcryptjs from 'bcryptjs';
 import { UnprocessableEntityException } from '@app/common';
-import { UserDomain } from './users/domain';
+import { GetUserDto } from './dto/get-user.dto';
+import { UserDomain } from './domain';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {

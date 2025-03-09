@@ -6,7 +6,7 @@ import { UsersService } from 'apps/users/src/users.service';
 import * as bcryptjs from 'bcryptjs';
 import { Response } from 'express';
 import { TokenPayload } from './interface/token-payload.interface';
-import { UserDomain } from 'apps/users/src/users';
+import { UserDomain } from 'apps/users/src/domain';
 
 @Injectable()
 export class AuthsService {

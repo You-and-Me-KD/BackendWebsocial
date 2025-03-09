@@ -4,8 +4,8 @@ import { AuthsService } from './auths.service';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { UserDomain } from 'apps/users/src/users';
 import { CurrentUser } from '@app/common';
+import { UserDomain } from 'apps/users/src/domain';
 
 @Controller('auths')
 export class AuthsController {
