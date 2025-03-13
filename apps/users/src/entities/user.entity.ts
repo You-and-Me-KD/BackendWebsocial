@@ -1,6 +1,10 @@
 import { TypeOrmAbstractEntity } from '@app/common';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { MARITIAL_ENUM } from '../enums';
+import { UserPermissionEntity } from './user-permission.entity';
+import { UserSocialEntity } from './user-social.entity';
+import { SecurityInfoEntity } from './security-info.entity';
+import { InterestEntity } from './interest.entity';
 
 @Entity('users')
 export class UserEntity extends TypeOrmAbstractEntity {
@@ -78,30 +82,49 @@ export class UserEntity extends TypeOrmAbstractEntity {
   isNotifyMarket: boolean;
   @Column({ type: 'text', nullable: true })
   streamDescription: string;
-
-  /*
-    - NEED UPDATE
-    - Related with table: avatars
-  */
   @Column({ type: 'varchar', nullable: true })
   avatarId: string;
-  /*
-          - NEED UPDATE
-          - Related with table: avatars
-      */
   @Column({ type: 'varchar', nullable: true })
   bannerId: string;
-
-  /*
-      - NEED UPDATE
-      - Related with table: countries
-    */
   @Column({ type: 'varchar', nullable: true })
   countryId: string;
-  /*
-        - NEED UPDATE
-        - Related with table: cities
-      */
+
   @Column({ type: 'varchar', nullable: true })
   cityId: string;
+
+  @OneToOne(
+    () => UserPermissionEntity,
+    (userPermission) => userPermission.user,
+    {
+      // auto create userPermission when create user
+      cascade: true,
+      // eager load userPermission when get user
+      eager: true,
+    },
+  )
+  userPermission: UserPermissionEntity;
+
+  @OneToOne(() => UserSocialEntity, (userSocial) => userSocial.user, {
+    // auto create userSocials when create user
+    cascade: true,
+    // eager load userSocials when get user
+    eager: true,
+  })
+  userSocial: UserSocialEntity;
+
+  @OneToOne(() => SecurityInfoEntity, (securityInfo) => securityInfo.user, {
+    // auto create userSocials when create user
+    cascade: true,
+    // eager load userSocials when get user
+    eager: true,
+  })
+  securityInfo: SecurityInfoEntity;
+
+  @OneToMany(() => InterestEntity, (interest) => interest.user, {
+    // auto create userSocials when create user
+    cascade: true,
+    // eager load userSocials when get user
+    eager: true,
+  })
+  interests: InterestEntity[];
 }

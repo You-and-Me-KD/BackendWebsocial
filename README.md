@@ -84,3 +84,7 @@ docker compose up
 docker compose down -v #-v to remove all the volumn
 
 ```
+```bash
+# generate new services
+nest g app services_name
+```

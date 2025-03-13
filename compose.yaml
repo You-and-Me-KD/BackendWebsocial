@@ -27,6 +27,20 @@ services:
       - .:/usr/src/app
     depends_on:
       - postgresdb
+  files:
+    build:
+      context: .
+      dockerfile: ./apps/files/Dockerfile
+      target: development
+    command: yarn start:dev files
+    env_file:
+      - ./apps/files/.env
+    ports:
+      - '${FILES_PORT}:2802'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgresdb
   postgresdb:
     image: postgres:17-alpine
     environment:

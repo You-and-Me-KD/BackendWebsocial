@@ -4,7 +4,7 @@ import { UsersController } from './users.controller';
 import { DatabaseModule, LoggerInterceptor, LoggerModule } from '@app/common';
 import { UsersRepository } from './users.repository';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { ExceptionFilter } from '@app/common/exception';
+import { ExceptionFilter } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -13,7 +13,10 @@ import { UserEntity } from './entities';
 
 @Module({
   imports: [
-    DatabaseModule,
+    DatabaseModule.forRoot({
+      useMongoose: true,
+      useTypeOrm: true,
+    }),
     DatabaseModule.forFeature({ typeormEntities: [UserEntity] }),
     LoggerModule,
     ConfigModule.forRoot({
