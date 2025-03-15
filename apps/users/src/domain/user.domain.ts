@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MARITIAL_ENUM } from '../enums';
+import { BaseDomain } from '@app/common/domain';
 
-export class UserDomain {
+export class UserDomain extends BaseDomain {
   @ApiProperty({
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -283,25 +284,4 @@ export class UserDomain {
     description: 'City ID type by UUID',
   })
   cityId: string;
-
-  @ApiProperty({
-    type: Date,
-    example: new Date(),
-    description: 'Created date of the user',
-  })
-  createdAt: Date;
-
-  @ApiProperty({
-    type: Date,
-    example: new Date(),
-    description: 'Updated date of the user',
-  })
-  updatedAt: Date;
-
-  @ApiProperty({
-    type: Date,
-    example: new Date(),
-    description: 'Deleted date of the user',
-  })
-  deletedAt: Date;
 }

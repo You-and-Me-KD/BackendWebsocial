@@ -35,6 +35,42 @@
       "compilerOptions": {
         "tsConfigPath": "apps/auths/tsconfig.app.json"
       }
+    },
+    "files": {
+      "type": "application",
+      "root": "apps/files",
+      "entryFile": "main",
+      "sourceRoot": "apps/files/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/files/tsconfig.app.json"
+      }
+    },
+    "socials": {
+      "type": "application",
+      "root": "apps/socials",
+      "entryFile": "main",
+      "sourceRoot": "apps/socials/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/socials/tsconfig.app.json"
+      }
+    },
+    "chats": {
+      "type": "application",
+      "root": "apps/chats",
+      "entryFile": "main",
+      "sourceRoot": "apps/chats/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chats/tsconfig.app.json"
+      }
+    },
+    "notifications": {
+      "type": "application",
+      "root": "apps/notifications",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

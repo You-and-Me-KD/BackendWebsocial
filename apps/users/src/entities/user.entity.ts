@@ -1,6 +1,14 @@
 import { TypeOrmAbstractEntity } from '@app/common';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import { MARITIAL_ENUM } from '../enums';
+import { UserPermissionEntity } from './user-permission.entity';
+import { UserSocialEntity } from './user-social.entity';
+import { SecurityInfoEntity } from './security-info.entity';
+import { InterestEntity } from './interest.entity';
+import { JobAndEducationEntity } from './job-and-education.entity';
+import { UserBadgeEntity } from './user-badge.entity';
+import { ChannelFAQEntity } from './channel-faq.entity';
+import { StreamScheduleEntity } from './stream-schedule.entity';
 
 @Entity('users')
 export class UserEntity extends TypeOrmAbstractEntity {
@@ -36,6 +44,7 @@ export class UserEntity extends TypeOrmAbstractEntity {
     type: 'enum',
     enum: MARITIAL_ENUM,
     default: MARITIAL_ENUM.SINGLE,
+    enumName: 'maritial_status',
   })
   martialStatus: MARITIAL_ENUM;
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -78,30 +87,75 @@ export class UserEntity extends TypeOrmAbstractEntity {
   isNotifyMarket: boolean;
   @Column({ type: 'text', nullable: true })
   streamDescription: string;
-
-  /*
-    - NEED UPDATE
-    - Related with table: avatars
-  */
   @Column({ type: 'varchar', nullable: true })
   avatarId: string;
-  /*
-          - NEED UPDATE
-          - Related with table: avatars
-      */
   @Column({ type: 'varchar', nullable: true })
   bannerId: string;
-
-  /*
-      - NEED UPDATE
-      - Related with table: countries
-    */
   @Column({ type: 'varchar', nullable: true })
   countryId: string;
-  /*
-        - NEED UPDATE
-        - Related with table: cities
-      */
+
   @Column({ type: 'varchar', nullable: true })
   cityId: string;
+
+  @OneToOne(
+    () => UserPermissionEntity,
+    (userPermission) => userPermission.user,
+    {
+      // auto create userPermission when create user
+      cascade: true,
+      // eager load userPermission when get user
+      eager: true,
+    },
+  )
+  userPermission: UserPermissionEntity;
+
+  @OneToOne(() => UserSocialEntity, (userSocial) => userSocial.user, {
+    cascade: true,
+    eager: true,
+  })
+  userSocial: UserSocialEntity;
+
+  @OneToOne(() => SecurityInfoEntity, (securityInfo) => securityInfo.user, {
+    cascade: true,
+    eager: true,
+  })
+  securityInfo: SecurityInfoEntity;
+
+  @OneToMany(() => InterestEntity, (interest) => interest.user, {
+    cascade: true,
+    eager: true,
+  })
+  interests: InterestEntity[];
+
+  @OneToMany(
+    () => JobAndEducationEntity,
+    (jobAndEducation) => jobAndEducation.user,
+    {
+      cascade: true,
+      eager: true,
+    },
+  )
+  jobAndEducations: JobAndEducationEntity[];
+
+  @OneToMany(() => UserBadgeEntity, (userBadge) => userBadge.user, {
+    cascade: true,
+    eager: true,
+  })
+  userBadges: UserBadgeEntity[];
+
+  @OneToMany(() => ChannelFAQEntity, (channelFaq) => channelFaq.user, {
+    cascade: true,
+    eager: true,
+  })
+  channelFaq: ChannelFAQEntity[];
+
+  @OneToMany(
+    () => StreamScheduleEntity,
+    (streamSchedule) => streamSchedule.user,
+    {
+      cascade: true,
+      eager: true,
+    },
+  )
+  streamSchedules: StreamScheduleEntity[];
 }

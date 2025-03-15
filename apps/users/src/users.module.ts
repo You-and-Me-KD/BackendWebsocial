@@ -4,17 +4,46 @@ import { UsersController } from './users.controller';
 import { DatabaseModule, LoggerInterceptor, LoggerModule } from '@app/common';
 import { UsersRepository } from './users.repository';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { ExceptionFilter } from '@app/common/exception';
+import { ExceptionFilter } from '@app/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/constants';
 import { UserEntity } from './entities';
+import { UserPermissionEntity } from './entities/user-permission.entity';
+import { UserSocialEntity } from './entities/user-social.entity';
+import { SecurityInfoEntity } from './entities/security-info.entity';
+import { SecurityInfoQuestionEntity } from './entities/security-info-question.entity';
+import { SecurityQuestionEntity } from './entities/security-question.entity';
+import { InterestEntity } from './entities/interest.entity';
+import { BadgeEntity } from './entities/badge.entity';
+import { UserBadgeEntity } from './entities/user-badge.entity';
+import { ChannelFAQEntity } from './entities/channel-faq.entity';
+import { JobAndEducationEntity } from './entities/job-and-education.entity';
+import { StreamScheduleEntity } from './entities/stream-schedule.entity';
 
 @Module({
   imports: [
-    DatabaseModule,
-    DatabaseModule.forFeature({ typeormEntities: [UserEntity] }),
+    DatabaseModule.forRoot({
+      useMongoose: false,
+      useTypeOrm: true,
+    }),
+    DatabaseModule.forFeature({
+      typeormEntities: [
+        UserEntity,
+        UserPermissionEntity,
+        UserSocialEntity,
+        SecurityInfoEntity,
+        SecurityInfoQuestionEntity,
+        SecurityQuestionEntity,
+        InterestEntity,
+        BadgeEntity,
+        UserBadgeEntity,
+        ChannelFAQEntity,
+        JobAndEducationEntity,
+        StreamScheduleEntity,
+      ],
+    }),
     LoggerModule,
     ConfigModule.forRoot({
       envFilePath: './apps/users/.env',
@@ -27,11 +56,6 @@ import { UserEntity } from './entities';
         DATABASE_PASSWORD: Joi.string().required(),
         DATABASE_DB: Joi.string().required(),
         DB_SYNC: Joi.boolean().default(false),
-        MONGO_HOST: Joi.string().required(),
-        MONGO_PORT: Joi.number().required(),
-        MONGO_USER: Joi.string().required(),
-        MONGO_PASSWORD: Joi.string().required(),
-        MONGO_DB: Joi.string().required(),
         PORT: Joi.number().required(),
         AUTH_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
