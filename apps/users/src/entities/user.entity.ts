@@ -9,6 +9,7 @@ import { JobAndEducationEntity } from './job-and-education.entity';
 import { UserBadgeEntity } from './user-badge.entity';
 import { ChannelFAQEntity } from './channel-faq.entity';
 import { StreamScheduleEntity } from './stream-schedule.entity';
+import { UserPaymentMethodEntity } from './user-payment-method.entity';
 
 @Entity('users')
 export class UserEntity extends TypeOrmAbstractEntity {
@@ -158,4 +159,10 @@ export class UserEntity extends TypeOrmAbstractEntity {
     },
   )
   streamSchedules: StreamScheduleEntity[];
+
+  @OneToMany(
+    () => UserPaymentMethodEntity,
+    (paymentMethod) => paymentMethod.user,
+  )
+  paymentMethods: UserPaymentMethodEntity[];
 }

@@ -21,6 +21,8 @@ import { UserBadgeEntity } from './entities/user-badge.entity';
 import { ChannelFAQEntity } from './entities/channel-faq.entity';
 import { JobAndEducationEntity } from './entities/job-and-education.entity';
 import { StreamScheduleEntity } from './entities/stream-schedule.entity';
+import { PaymentMethodEntity } from './entities/payment-method.entity';
+import { UserPaymentMethodEntity } from './entities/user-payment-method.entity';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { StreamScheduleEntity } from './entities/stream-schedule.entity';
         ChannelFAQEntity,
         JobAndEducationEntity,
         StreamScheduleEntity,
+        PaymentMethodEntity,
+        UserPaymentMethodEntity,
       ],
     }),
     LoggerModule,

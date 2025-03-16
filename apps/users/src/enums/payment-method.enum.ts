@@ -1,0 +1,5 @@
+export enum PAYMENT_METHOD_ENUM {
+  PAYPAL = 'PAYPAL',
+  CRYPTO = 'CRYPTO',
+  STRIPE = 'STRIPE',
+}

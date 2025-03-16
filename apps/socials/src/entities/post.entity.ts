@@ -24,7 +24,12 @@ export class PostEntity extends TypeOrmAbstractEntity {
   @Column({ type: 'boolean', default: false })
   isFeatured: boolean;
 
-  @Column({ type: 'enum', enum: POST_TYPE_ENUM, default: POST_TYPE_ENUM.POST })
+  @Column({
+    type: 'enum',
+    enum: POST_TYPE_ENUM,
+    default: POST_TYPE_ENUM.POST,
+    enumName: 'post_type',
+  })
   type: POST_TYPE_ENUM;
 
   @Column({

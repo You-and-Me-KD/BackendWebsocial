@@ -83,6 +83,34 @@ services:
       - .:/usr/src/app
     depends_on:
       - mongodb
+  groups:
+    build:
+      context: .
+      dockerfile: ./apps/groups/Dockerfile
+      target: development
+    command: yarn start:dev groups
+    env_file:
+      - ./apps/groups/.env
+    ports:
+      - '${GROUPS_PORT}:2807'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgresdb
+  marketplaces:
+    build:
+      context: .
+      dockerfile: ./apps/marketplaces/Dockerfile
+      target: development
+    command: yarn start:dev marketplaces
+    env_file:
+      - ./apps/marketplaces/.env
+    ports:
+      - '${MARKETPLACES_PORT}:2808'
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgresdb
   mongodb:
     image: mongo:latest
     restart: always

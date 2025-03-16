@@ -8,7 +8,7 @@ export enum POST_TYPE_ENUM {
 export enum POST_VISIBILITY_ENUM {
   PUBLIC = 'public',
   FRIEND = 'friend',
-  private = 'private',
+  PRIVATE = 'private',
 }
 
 export enum POST_LIKE_TYPE_ENUM {

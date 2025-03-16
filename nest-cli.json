@@ -71,6 +71,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/notifications/tsconfig.app.json"
       }
+    },
+    "groups": {
+      "type": "application",
+      "root": "apps/groups",
+      "entryFile": "main",
+      "sourceRoot": "apps/groups/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/groups/tsconfig.app.json"
+      }
+    },
+    "marketplaces": {
+      "type": "application",
+      "root": "apps/marketplaces",
+      "entryFile": "main",
+      "sourceRoot": "apps/marketplaces/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/marketplaces/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
