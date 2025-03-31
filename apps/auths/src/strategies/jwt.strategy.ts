@@ -1,15 +1,16 @@
-import { UsersService } from 'apps/users/src/users.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from '../interface/token-payload.interface';
+import { MICRO_SERVICE_KEYS, USERS_SERVICE } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: ConfigService,
-    private readonly usersService: UsersService,
+    @Inject(USERS_SERVICE) private readonly userClient: ClientProxy,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -23,6 +24,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate({ id }: TokenPayload) {
-    return this.usersService.getUser({ id });
+    return this.userClient.send(MICRO_SERVICE_KEYS.USERS.GET_USER, { id });
   }
 }

@@ -16,21 +16,21 @@ export class UserDomain extends BaseDomain {
     example: 'John',
     description: 'First name of the user',
   })
-  firstName: string;
+  firstName?: string;
 
   @ApiProperty({
     type: String,
     example: 'Doe',
     description: 'Last name of the user',
   })
-  lastName: string;
+  lastName?: string;
 
   @ApiProperty({
     type: String,
     example: 'johndoe',
     description: 'Username of the user',
   })
-  userName: string;
+  username: string;
 
   @ApiProperty({
     type: String,
@@ -44,21 +44,21 @@ export class UserDomain extends BaseDomain {
     example: '+84912879856',
     description: 'Phone number of the user',
   })
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @ApiProperty({
     type: String,
     example: 'en',
     description: 'Language of the user',
   })
-  language: string;
+  language?: string;
 
   @ApiProperty({
     type: String,
     example: '123 Main Street, New York, NY 10030',
     description: 'Address of the user',
   })
-  address: string;
+  address?: string;
 
   @ApiProperty({
     type: String,
@@ -73,215 +73,229 @@ export class UserDomain extends BaseDomain {
     example: 'This is a description',
     description: 'Description of the user',
   })
-  description: string;
+  description?: string;
 
   @ApiProperty({
     type: String,
     example: 'This is a tag line',
     description: 'Tag line of the user',
   })
-  tagLine: string;
+  tagLine?: string;
 
   @ApiProperty({
     type: String,
     example: 'jonedeo@gmail.com',
     description: 'Public email of the user',
   })
-  publicEmail: string;
+  publicEmail?: string;
 
   @ApiProperty({
     type: String,
     example: 'https://johndoe.com',
     description: 'Public website of the user',
   })
-  publicWebsite: string;
+  publicWebsite?: string;
 
   @ApiProperty({
     type: Date,
     example: '1990-01-01',
     description: 'Birth date of the user',
   })
-  birthDate: Date;
+  birthDate?: Date;
 
   @ApiProperty({
     type: String,
     example: 'Computer Science',
     description: 'Major of the user',
   })
-  major: string;
+  major?: string;
 
   @ApiProperty({
     type: String,
     example: MARITIAL_ENUM.MARRIED,
     description: 'Marital status of the user',
   })
-  martialStatus: MARITIAL_ENUM;
+  martialStatus?: MARITIAL_ENUM;
 
   @ApiProperty({
     type: String,
     example: 'New York, NY',
     description: 'Birth place of the user',
   })
-  birthPlace: string;
+  birthPlace?: string;
 
   @ApiProperty({
     type: String,
     example: '123456',
     description: 'PS ID of the user',
   })
-  psId: string;
+  psId?: string;
 
   @ApiProperty({
     type: String,
     example: '123456',
     description: 'XB ID of the user',
   })
-  xbId: string;
+  xbId?: string;
 
   @ApiProperty({
     type: Number,
     example: 1,
     description: 'Level of the user',
   })
-  level: number;
+  level?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Experience of the user',
   })
-  exp: number;
+  exp?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Follower count of the user',
   })
-  followerCount: number;
+  followerCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Following count of the user',
   })
-  followingCount: number;
+  followingCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Post count of the user',
   })
-  postCount: number;
+  postCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Comment count of the user',
   })
-  commentCount: number;
+  commentCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Visit count of the user',
   })
-  visitCount: number;
+  visitCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'React count of the user',
   })
-  reactCount: number;
+  reactCount?: number;
 
   @ApiProperty({
     type: Number,
     example: 0,
     description: 'Share count of the user',
   })
-  shareCount: number;
+  shareCount?: number;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is get latest news of the user',
   })
-  isGetLastestNews: boolean;
+  isGetLastestNews?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify comment of the user',
   })
-  isNotifyComment: boolean;
+  isNotifyComment?: boolean;
+
+  @ApiProperty({
+    type: Boolean,
+    example: false,
+    description: 'Is get new by mail of the user',
+  })
+  isGetNewByMail?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify group of the user',
   })
-  isNotifyGroup: boolean;
+  isNotifyGroup?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify tag of the user',
   })
-  isNotifyTag: boolean;
+  isNotifyTag?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify friend request of the user',
   })
-  isNotifyFriendRequest: boolean;
+  isNotifyFriendRequest?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify event of the user',
   })
-  isNotifyEvent: boolean;
+  isNotifyEvent?: boolean;
 
   @ApiProperty({
     type: Boolean,
     example: false,
     description: 'Is notify market of the user',
   })
-  isNotifyMarket: boolean;
+  isNotifyMarket?: boolean;
 
   @ApiProperty({
     type: String,
     example: 'This is a stream description',
     description: 'Stream description of the user',
   })
-  streamDescription: string;
+  streamDescription?: string;
 
   @ApiProperty({
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
     description: 'Avatar ID type by UUID',
   })
-  avatarId: string;
+  avatarId?: string;
 
   @ApiProperty({
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
     description: 'Banner ID type by UUID',
   })
-  bannerId: string;
+  bannerId?: string;
 
   @ApiProperty({
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
     description: 'Country ID type by UUID',
   })
-  countryId: string;
+  countryId?: string;
 
   @ApiProperty({
     type: String,
     example: '123e4567-e89b-12d3-a456-426614174000',
     description: 'City ID type by UUID',
   })
-  cityId: string;
+  cityId?: string;
+
+  @ApiProperty({
+    type: Boolean,
+    example: false,
+    description: 'Is verify of the user',
+  })
+  isVerify?: boolean;
 }

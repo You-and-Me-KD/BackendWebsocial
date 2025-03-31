@@ -1,40 +1,25 @@
-import { JwtAuthGuard } from '@app/common';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MICRO_SERVICE_KEYS, RegisterDto } from '@app/common';
+import { GetUserDto } from './dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @MessagePattern(MICRO_SERVICE_KEYS.USERS.REGISTER)
+  async register(@Payload() registerDto: RegisterDto) {
+    return await this.usersService.register(registerDto);
   }
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.usersService.findAll();
+  @MessagePattern(MICRO_SERVICE_KEYS.USERS.FIND_ONE_USER)
+  async findOneUser(@Payload() data: { email: string; username: string }) {
+    return await this.usersService.findOne(data);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  @MessagePattern(MICRO_SERVICE_KEYS.USERS.GET_USER)
+  async getUser(@Payload() getUserDto: GetUserDto) {
+    return await this.usersService.getUser(getUserDto);
   }
 }

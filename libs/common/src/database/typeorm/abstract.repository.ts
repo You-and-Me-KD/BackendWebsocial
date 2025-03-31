@@ -3,7 +3,7 @@ import {
   AbstractSorting,
   SortOptions,
 } from '@app/common/type/abstract.sorting';
-import { Logger, NotFoundException } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import {
   DeepPartial,
   FindOneOptions,
@@ -11,6 +11,7 @@ import {
   Repository,
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
+import { NotFoundException } from '@app/common';
 
 export abstract class AbstractRepository<
   TEntity extends AbstractEntity,

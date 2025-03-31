@@ -89,6 +89,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/marketplaces/tsconfig.app.json"
       }
+    },
+    "mails": {
+      "type": "application",
+      "root": "apps/mails",
+      "entryFile": "main",
+      "sourceRoot": "apps/mails/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mails/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

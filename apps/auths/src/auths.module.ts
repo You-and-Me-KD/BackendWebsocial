@@ -3,17 +3,21 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import * as Joi from 'joi';
 import { AuthsService } from './auths.service';
-import { ExceptionFilter, LoggerInterceptor, LoggerModule } from '@app/common';
+import {
+  ExceptionFilter,
+  LoggerInterceptor,
+  LoggerModule,
+  USERS_SERVICE,
+} from '@app/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthsController } from './auths.controller';
-import { UsersModule } from 'apps/users/src/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
-    UsersModule,
     PassportModule,
     LoggerModule,
     ConfigModule.forRoot({
@@ -24,6 +28,8 @@ import { PassportModule } from '@nestjs/passport';
         JWT_EXPIRES_IN: Joi.string().required(),
         TCP_PORT: Joi.number().required(),
         HTTP_PORT: Joi.number().required(),
+        USER_HOST: Joi.string().required(),
+        USER_PORT: Joi.number().required(),
         API_PREFIX: Joi.string().default('api'),
       }),
     }),
@@ -36,6 +42,19 @@ import { PassportModule } from '@nestjs/passport';
       }),
       inject: [ConfigService],
     }),
+    ClientsModule.registerAsync([
+      {
+        name: USERS_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get<string>('USER_HOST'),
+            port: configService.get<number>('USER_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [AuthsController],
   providers: [

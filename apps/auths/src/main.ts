@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AuthsModule } from './auths.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
@@ -11,7 +11,6 @@ import { setupSwagger } from '@app/common/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AuthsModule);
   const configServices = app.get(ConfigService);
-  app.setGlobalPrefix(configServices.get('API_PREFIX') || 'api');
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
@@ -19,16 +18,21 @@ async function bootstrap() {
       port: configServices.get('TCP_PORT'),
     },
   });
+
+  app.setGlobalPrefix(configServices.get('API_PREFIX') || 'api');
   setupSwagger(app, 'Auths', []);
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
-      // Cái này dùng để white list DTO khi gửi lên, nếu fields không được khai báo trong DTO thì sẽ bị loại bỏ
       whitelist: true,
       transform: true,
+      forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new ClassSerializerInterceptor(app.get(Reflector)),
+  );
 
   app.useLogger(app.get(Logger));
   const httpPort = configServices.get('HTTP_PORT');

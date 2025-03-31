@@ -1,32 +1,46 @@
-import { UnauthorizedException } from '@app/common';
-import { Injectable } from '@nestjs/common';
+import {
+  LoginDto,
+  MICRO_SERVICE_KEYS,
+  RegisterDto,
+  UnauthorizedException,
+  USERS_SERVICE,
+} from '@app/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'apps/users/src/users.service';
+import { ClientProxy } from '@nestjs/microservices';
+import { UserDomain } from 'apps/users/src/domain';
 import * as bcryptjs from 'bcryptjs';
 import { Response } from 'express';
+import { lastValueFrom } from 'rxjs';
 import { TokenPayload } from './interface/token-payload.interface';
-import { UserDomain } from 'apps/users/src/domain';
 
 @Injectable()
 export class AuthsService {
   constructor(
-    private readonly usersService: UsersService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @Inject(USERS_SERVICE) private readonly userClient: ClientProxy,
   ) {}
-
-  async verifyUser(email: string, password: string) {
-    const user = await this.usersService.findOne({ email });
-    const isMatchPassword = await bcryptjs.compare(
-      password,
-      user.hashedPassword,
-    );
-    if (!isMatchPassword) {
-      throw new UnauthorizedException('Credentials not match');
+  async verifyUser({ email, password, username }: LoginDto) {
+    try {
+      const user = await lastValueFrom(
+        this.userClient.send(MICRO_SERVICE_KEYS.USERS.FIND_ONE_USER, {
+          email,
+          username,
+        }),
+      );
+      const isMatchPassword = await bcryptjs.compare(
+        password,
+        user.hashedPassword,
+      );
+      if (!isMatchPassword) {
+        throw new UnauthorizedException('Credentials not match');
+      }
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
     }
-
-    return user;
   }
 
   async login(user: UserDomain, response: Response) {
@@ -41,5 +55,9 @@ export class AuthsService {
       expires,
       httpOnly: true,
     });
+  }
+
+  async register(data: RegisterDto) {
+    return this.userClient.send(MICRO_SERVICE_KEYS.USERS.REGISTER, data);
   }
 }

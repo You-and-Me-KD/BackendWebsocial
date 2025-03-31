@@ -44,7 +44,6 @@ export class DatabaseModule {
             const password = configService.get<string>('MONGO_PASSWORD');
             const db = configService.get<string>('MONGO_DB');
             const uri = `mongodb://${user}:${password}@${host}:${port}/${db}?authSource=admin`;
-            console.log(uri, 'KHIEM');
             return {
               uri,
             };

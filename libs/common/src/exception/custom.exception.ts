@@ -2,9 +2,9 @@
 
 import { HttpStatus } from '@nestjs/common';
 import { ReasonPhrases } from './reason-phrases';
-import { BaseException } from '.';
+import { BaseRpcException } from '.';
 
-class ConflictException extends BaseException {
+class ConflictException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.CONFLICT,
     statusCode: number = HttpStatus.CONFLICT,
@@ -13,7 +13,7 @@ class ConflictException extends BaseException {
   }
 }
 
-class BadRequestException extends BaseException {
+class BadRequestException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.BAD_REQUEST,
     statusCode: number = HttpStatus.BAD_REQUEST,
@@ -22,7 +22,7 @@ class BadRequestException extends BaseException {
   }
 }
 
-class NotFoundException extends BaseException {
+class NotFoundException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.NOT_FOUND,
     statusCode: number = HttpStatus.NOT_FOUND,
@@ -31,7 +31,7 @@ class NotFoundException extends BaseException {
   }
 }
 
-class UnauthorizedException extends BaseException {
+class UnauthorizedException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.UNAUTHORIZED,
     statusCode: number = HttpStatus.UNAUTHORIZED,
@@ -40,7 +40,7 @@ class UnauthorizedException extends BaseException {
   }
 }
 
-class ForbiddenException extends BaseException {
+class ForbiddenException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.FORBIDDEN,
     statusCode: number = HttpStatus.FORBIDDEN,
@@ -49,7 +49,7 @@ class ForbiddenException extends BaseException {
   }
 }
 
-class RequestTimeoutException extends BaseException {
+class RequestTimeoutException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.REQUEST_TIMEOUT,
     statusCode: number = HttpStatus.REQUEST_TIMEOUT,
@@ -58,10 +58,19 @@ class RequestTimeoutException extends BaseException {
   }
 }
 
-class UnprocessableEntityException extends BaseException {
+class UnprocessableEntityException extends BaseRpcException {
   constructor(
     message: string = ReasonPhrases.UNPROCESSABLE_ENTITY,
     statusCode: number = HttpStatus.UNPROCESSABLE_ENTITY,
+  ) {
+    super(message, statusCode);
+  }
+}
+
+class InternalServerErrorException extends BaseRpcException {
+  constructor(
+    message: string = ReasonPhrases.INTERNAL_SERVER_ERROR,
+    statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR,
   ) {
     super(message, statusCode);
   }
@@ -75,4 +84,5 @@ export {
   ForbiddenException,
   RequestTimeoutException,
   UnprocessableEntityException,
+  InternalServerErrorException,
 };

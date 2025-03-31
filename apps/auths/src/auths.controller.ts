@@ -1,17 +1,42 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  CurrentUser,
+  LoginDto,
+  MICRO_SERVICE_KEYS,
+  RegisterDto,
+} from '@app/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { UserDomain } from 'apps/users/src/domain';
 import { Response } from 'express';
 import { AuthsService } from './auths.service';
-import { LocalAuthGuard } from './guard/local-auth.guard';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
-import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CurrentUser } from '@app/common';
-import { UserDomain } from 'apps/users/src/domain';
+import { LocalAuthGuard } from './guard/local-auth.guard';
+import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auths')
 export class AuthsController {
   constructor(private readonly authsService: AuthsService) {}
 
   @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Login user',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return user information and set cookie',
+    type: UserDomain,
+  })
+  @ApiBody({ type: LoginDto })
   @Post('login')
   async login(
     @CurrentUser() user: UserDomain,
@@ -35,8 +60,25 @@ export class AuthsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @MessagePattern('authenticate')
+  @MessagePattern(MICRO_SERVICE_KEYS.AUTH.AUTHENTICATE)
   async authenticate(@Payload() data: any) {
     return data.user;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Register new user',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return user information',
+    type: UserDomain,
+  })
+  @Post('register')
+  async register(
+    @Body()
+    data: RegisterDto,
+  ) {
+    return this.authsService.register(data);
   }
 }

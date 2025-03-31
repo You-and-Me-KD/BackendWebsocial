@@ -7,13 +7,14 @@ export class UserMapper {
     user.id = raw.id;
     user.firstName = raw.firstName;
     user.lastName = raw.lastName;
-    user.userName = raw.userName;
+    user.username = raw.username;
     user.email = raw.email;
     user.phoneNumber = raw.phoneNumber;
     user.language = raw.language;
     user.address = raw.address;
     user.description = raw.description;
     user.tagLine = raw.tagLine;
+    user.hashedPassword = raw.hashedPassword;
     user.publicEmail = raw.publicEmail;
     user.publicWebsite = raw.publicWebsite;
     user.birthDate = raw.birthDate;
@@ -30,6 +31,8 @@ export class UserMapper {
     user.commentCount = raw.commentCount;
     user.visitCount = raw.visitCount;
     user.reactCount = raw.reactCount;
+    user.isVerify = raw.isVerify;
+    user.isGetNewByMail = raw.isGetNewByMail;
     user.createdAt = raw.createdAt;
     user.updatedAt = raw.updatedAt;
     return user;
@@ -40,7 +43,7 @@ export class UserMapper {
     user.id = domain.id;
     user.firstName = domain.firstName;
     user.lastName = domain.lastName;
-    user.userName = domain.userName;
+    user.username = domain.username;
     user.email = domain.email;
     user.phoneNumber = domain.phoneNumber;
     user.language = domain.language;
@@ -66,6 +69,8 @@ export class UserMapper {
     user.commentCount = domain.commentCount;
     user.visitCount = domain.visitCount;
     user.reactCount = domain.reactCount;
+    user.isVerify = domain.isVerify;
+    user.isGetNewByMail = domain.isGetNewByMail;
     user.createdAt = domain.createdAt;
     user.updatedAt = domain.updatedAt;
     user.deletedAt = domain.deletedAt;
