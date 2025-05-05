@@ -23,14 +23,7 @@ export class ExceptionFilter implements NestExceptionFilter {
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: any = 'Internal server error';
     let exceptionName = 'Unknown';
-    console.log(
-      exception,
-      exception instanceof HttpException,
-      exception instanceof RpcException,
-      exception instanceof Error,
-      typeof exception,
-      '00000',
-    );
+
     try {
       if (exception instanceof HttpException) {
         status = exception.getStatus();
@@ -44,6 +37,15 @@ export class ExceptionFilter implements NestExceptionFilter {
             : HttpStatus.INTERNAL_SERVER_ERROR;
         message = error;
         exceptionName = exception.name;
+      } else if (
+        typeof exception === 'object' &&
+        exception !== null &&
+        'statusCode' in exception &&
+        'message' in exception
+      ) {
+        status = (exception as any).statusCode;
+        message = (exception as any).message;
+        exceptionName = 'ExceptionProcessingError';
       } else if (exception instanceof Error) {
         message = exception.message;
         exceptionName = exception.name;

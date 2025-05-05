@@ -22,7 +22,7 @@ COPY . .
 # Build the application
 RUN yarn build
 
-FROM node:22.13.1-alpine as production
+FROM development as production
 
 # Set the NODE_ENV to production
 ARG NODE_ENV=production

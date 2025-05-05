@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { MARITIAL_ENUM } from '../enums';
 import { BaseDomain } from '@app/common/domain';
+import { AuthTokenDomain } from './auth-token.domain';
 
 export class UserDomain extends BaseDomain {
   @ApiProperty({
@@ -298,4 +299,11 @@ export class UserDomain extends BaseDomain {
     description: 'Is verify of the user',
   })
   isVerify?: boolean;
+
+  @ApiProperty({
+    type: [AuthTokenDomain],
+    description: 'List of auth tokens associated with the user',
+    example: [],
+  })
+  authTokens: AuthTokenDomain[];
 }

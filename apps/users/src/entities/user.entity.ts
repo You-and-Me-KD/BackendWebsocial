@@ -10,6 +10,7 @@ import { UserBadgeEntity } from './user-badge.entity';
 import { ChannelFAQEntity } from './channel-faq.entity';
 import { StreamScheduleEntity } from './stream-schedule.entity';
 import { UserPaymentMethodEntity } from './user-payment-method.entity';
+import { AuthTokenEntity } from './auth-token.entity';
 
 @Entity('users')
 export class UserEntity extends TypeOrmAbstractEntity {
@@ -208,4 +209,10 @@ export class UserEntity extends TypeOrmAbstractEntity {
     (paymentMethod) => paymentMethod.user,
   )
   paymentMethods: UserPaymentMethodEntity[];
+
+  @OneToMany(() => AuthTokenEntity, (authToken) => authToken.user, {
+    cascade: true,
+    eager: true,
+  })
+  authTokens: AuthTokenEntity[];
 }

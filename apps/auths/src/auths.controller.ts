@@ -3,6 +3,7 @@ import {
   LoginDto,
   MICRO_SERVICE_KEYS,
   RegisterDto,
+  ResendEmailRegisterDto,
 } from '@app/common';
 import {
   Body,
@@ -21,6 +22,8 @@ import { AuthsService } from './auths.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+import { VerifyTokenDto } from '@app/common/dto/verify-token.dto';
 
 @Controller('auths')
 export class AuthsController {
@@ -43,13 +46,13 @@ export class AuthsController {
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.authsService.login(user, response);
-    return user;
+    return plainToClass(UserDomain, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getMe(@CurrentUser() user: UserDomain) {
-    return user;
+    return plainToClass(UserDomain, user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -80,5 +83,38 @@ export class AuthsController {
     data: RegisterDto,
   ) {
     return this.authsService.register(data);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Verify register',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return user information',
+    type: UserDomain,
+  })
+  @Post('verify-token')
+  async verifyToken(
+    @Body()
+    data: VerifyTokenDto,
+  ) {
+    return this.authsService.verifyToken(data);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Resend verify token',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return user information',
+  })
+  @Post('resend-email-register')
+  async sendMailRegister(
+    @Body()
+    data: ResendEmailRegisterDto,
+  ) {
+    return this.authsService.sendMailRegister(data);
   }
 }

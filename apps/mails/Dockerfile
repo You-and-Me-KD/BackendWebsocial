@@ -42,4 +42,4 @@ RUN yarn install --production
 COPY --from=development /usr/src/app/dist ./dist
 
 # Start the application
-CMD ["node", "dist/apps/marketplaces/main"]
+CMD ["node", "dist/apps/mails/main"]

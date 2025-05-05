@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MailsService } from './mails.service';
 import { ConfigModule } from '@nestjs/config';
-import { ExceptionFilter, LoggerInterceptor, LoggerModule } from '@app/common';
 import * as Joi from 'joi';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { MailerService } from './mailer.service';
 
 @Module({
   imports: [
-    LoggerModule,
-
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: './apps/mails/.env',
@@ -18,20 +14,14 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
         MAIL_USER: Joi.string().required(),
         MAIL_PASSWORD: Joi.string().required(),
         MAIL_FROM: Joi.string().required(),
+        MAIL_SECURE: Joi.boolean().default(true),
+        APP_URL: Joi.string().required(),
+        TCP_PORT: Joi.number().required(),
       }),
     }),
   ],
   controllers: [],
-  providers: [
-    MailsService,
-    {
-      provide: APP_FILTER,
-      useClass: ExceptionFilter,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggerInterceptor,
-    },
-  ],
+  exports: [MailerService],
+  providers: [MailerModule, MailerService],
 })
-export class MailsModule {}
+export class MailerModule {}

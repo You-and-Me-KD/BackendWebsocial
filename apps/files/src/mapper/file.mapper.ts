@@ -15,12 +15,20 @@ export class FileMapper {
 
   static toPersistence(domain: FileDomain): FileEntity {
     const file = new FileEntity();
-    file.id = domain.id;
+    if (domain.id) {
+      file.id = domain.id;
+    }
     file.url = domain.url;
     file.type = domain.type;
-    file.createdAt = domain.createdAt;
-    file.updatedAt = domain.updatedAt;
-    file.deletedAt = domain.deletedAt;
+    if (domain.createdAt) {
+      file.createdAt = domain.createdAt;
+    }
+    if (domain.updatedAt) {
+      file.updatedAt = domain.updatedAt;
+    }
+    if (domain.deletedAt) {
+      file.deletedAt = domain.deletedAt;
+    }
     return file;
   }
 }

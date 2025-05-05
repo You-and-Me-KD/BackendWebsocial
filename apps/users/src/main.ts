@@ -1,15 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { UsersModule } from './users.module';
-import { ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import { TransformInterceptor } from '@app/common/interceptor/transform.interceptor';
 import * as cookieParser from 'cookie-parser';
 import { setupSwagger } from '@app/common/swagger';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(UsersModule);
+  const app = await NestFactory.create(AppModule);
   const configServices = app.get(ConfigService);
 
   app.connectMicroservice<MicroserviceOptions>({
@@ -31,7 +31,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new ClassSerializerInterceptor(app.get(Reflector)),
+  );
   app.useLogger(app.get(Logger));
 
   const httpPort = configServices.get('HTTP_PORT');

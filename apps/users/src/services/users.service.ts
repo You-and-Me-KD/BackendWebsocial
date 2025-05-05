@@ -1,40 +1,37 @@
 import {
+  AuthTokenDto,
   BadRequestException,
   handleServiceException,
-  MICRO_SERVICE_KEYS,
   RegisterDto,
   UnprocessableEntityException,
 } from '@app/common';
 import { Injectable } from '@nestjs/common';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { Payload } from '@nestjs/microservices';
 import * as bcryptjs from 'bcryptjs';
-import { UserDomain } from './domain';
-import { GetUserDto } from './dto';
-import { UsersRepository } from './users.repository';
+import { UserDomain } from '../domain';
+import { GetUserDto } from '../dto';
+import { UsersRepository } from '../repositories/users.repository';
+import { AUTH_TOKEN_TYPE_ENUM } from '../enums/auth-token.enum';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async register(registerDto: RegisterDto) {
+  async register(data: RegisterDto & { authTokens: AuthTokenDto }) {
     try {
-      const existingUser = await this.usersRepository.findOne({
-        where: [
-          { email: registerDto.email },
-          { username: registerDto.username },
+      await this.validateRegister(data);
+      const hashedPassword = await bcryptjs.hash(data.password, 10);
+      return await this.usersRepository.create({
+        ...data,
+        hashedPassword,
+        authTokens: [
+          {
+            ...data.authTokens,
+            type: AUTH_TOKEN_TYPE_ENUM.VERIFY_REGISTER,
+          },
         ],
       });
-      console.log(existingUser);
-      if (existingUser) {
-        throw new RpcException('Email or username already exists1');
-      }
-      const hashedPassword = await bcryptjs.hash(registerDto.password, 10);
-      return await this.usersRepository.create({
-        ...registerDto,
-        hashedPassword,
-      });
     } catch (error) {
-      console.log(error instanceof Error, 'cccc');
       handleServiceException(error, BadRequestException);
     }
   }
@@ -57,12 +54,32 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: filterQuery });
   }
 
-  @MessagePattern(MICRO_SERVICE_KEYS.USERS.GET_USER)
   async getUser(getUserDto: GetUserDto) {
     return this.usersRepository.findOne({
       where: {
         id: getUserDto.id,
       },
     });
+  }
+
+  async verifyToken({ email }: { email: string }) {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: {
+          email,
+        },
+      });
+
+      if (user.isVerify) {
+        throw new UnprocessableEntityException('User already verified');
+      }
+
+      return await this.usersRepository.update({
+        ...user,
+        isVerify: true,
+      });
+    } catch (error) {
+      handleServiceException(error, BadRequestException);
+    }
   }
 }

@@ -20,12 +20,12 @@ export class TransformInterceptor<T>
       map((data) => ({
         meta: {
           code: context.switchToHttp().getResponse().statusCode,
-          message: data.message ? data.message : 'Successful',
-          pagination: data.pagination,
+          message: data?.message ? data?.message : 'Successful',
+          pagination: data?.pagination,
           path: context.switchToHttp().getRequest().url,
         },
-        summary: data.summary,
-        data: data.results ? data.results : data,
+        summary: data?.summary,
+        data: data?.results ? data?.results : data,
       })),
     );
   }

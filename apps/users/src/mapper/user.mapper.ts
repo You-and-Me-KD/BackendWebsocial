@@ -1,5 +1,6 @@
 import { UserDomain } from '../domain';
 import { UserEntity } from '../entities';
+import { AuthTokenMapper } from './auth-token.mapper';
 
 export class UserMapper {
   static toDomain(raw: UserEntity): UserDomain {
@@ -35,6 +36,7 @@ export class UserMapper {
     user.isGetNewByMail = raw.isGetNewByMail;
     user.createdAt = raw.createdAt;
     user.updatedAt = raw.updatedAt;
+    user.authTokens = raw.authTokens;
     return user;
   }
 
@@ -71,9 +73,23 @@ export class UserMapper {
     user.reactCount = domain.reactCount;
     user.isVerify = domain.isVerify;
     user.isGetNewByMail = domain.isGetNewByMail;
-    user.createdAt = domain.createdAt;
-    user.updatedAt = domain.updatedAt;
-    user.deletedAt = domain.deletedAt;
+    if (domain.createdAt) {
+      user.createdAt = domain.createdAt;
+    }
+
+    if (domain.updatedAt) {
+      user.updatedAt = domain.updatedAt;
+    }
+    if (domain.deletedAt) {
+      user.deletedAt = domain.deletedAt;
+    }
+
+    if (domain.authTokens) {
+      user.authTokens = domain.authTokens.map((token) =>
+        AuthTokenMapper.toPersistence(token),
+      );
+    }
+
     return user;
   }
 }

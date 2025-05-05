@@ -7,6 +7,7 @@ import {
   ExceptionFilter,
   LoggerInterceptor,
   LoggerModule,
+  MAIL_SERVICE,
   USERS_SERVICE,
 } from '@app/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
@@ -26,10 +27,14 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
+        MAIL_SECRET: Joi.string().required(),
+        MAIL_EXPIRES_IN: Joi.string().required(),
         TCP_PORT: Joi.number().required(),
         HTTP_PORT: Joi.number().required(),
         USER_HOST: Joi.string().required(),
         USER_PORT: Joi.number().required(),
+        MAIL_HOST: Joi.string().required(),
+        MAIL_PORT: Joi.number().required(),
         API_PREFIX: Joi.string().default('api'),
       }),
     }),
@@ -50,6 +55,17 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           options: {
             host: configService.get<string>('USER_HOST'),
             port: configService.get<number>('USER_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: MAIL_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get<string>('MAIL_HOST'),
+            port: configService.get<number>('MAIL_PORT'),
           },
         }),
         inject: [ConfigService],

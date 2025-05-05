@@ -37,6 +37,13 @@ export abstract class AbstractRepository<
     return this.toDomain(savedEntity);
   }
 
+  async update(updateDomain: DeepPartial<TDomain>): Promise<TDomain> {
+    const updatedEntity = await this.repository.save(
+      this.toPersistence(updateDomain as TDomain),
+    );
+    return this.toDomain(updatedEntity);
+  }
+
   async findOne(filterQuery: FindOneOptions<TEntity>): Promise<TDomain> {
     const entity = await this.repository.findOne(filterQuery);
     if (!entity) {

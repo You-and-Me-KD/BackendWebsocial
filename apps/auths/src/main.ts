@@ -36,7 +36,6 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger));
   const httpPort = configServices.get('HTTP_PORT');
-
   await app.startAllMicroservices();
   await app.listen(httpPort);
 }
