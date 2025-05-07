@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { TokenPayload } from '../interface/token-payload.interface';
 import { MICRO_SERVICE_KEYS, USERS_SERVICE } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -24,6 +25,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate({ id }: TokenPayload) {
-    return this.userClient.send(MICRO_SERVICE_KEYS.USERS.GET_USER, { id });
+    return firstValueFrom(
+      this.userClient.send(MICRO_SERVICE_KEYS.USERS.GET_USER, { id }),
+    );
   }
 }

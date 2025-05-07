@@ -1,5 +1,4 @@
 import {
-  AuthTokenDto,
   BadRequestException,
   handleServiceException,
   RegisterDto,
@@ -11,25 +10,18 @@ import * as bcryptjs from 'bcryptjs';
 import { UserDomain } from '../domain';
 import { GetUserDto } from '../dto';
 import { UsersRepository } from '../repositories/users.repository';
-import { AUTH_TOKEN_TYPE_ENUM } from '../enums/auth-token.enum';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async register(data: RegisterDto & { authTokens: AuthTokenDto }) {
+  async register(data: RegisterDto) {
     try {
       await this.validateRegister(data);
       const hashedPassword = await bcryptjs.hash(data.password, 10);
       return await this.usersRepository.create({
         ...data,
         hashedPassword,
-        authTokens: [
-          {
-            ...data.authTokens,
-            type: AUTH_TOKEN_TYPE_ENUM.VERIFY_REGISTER,
-          },
-        ],
       });
     } catch (error) {
       handleServiceException(error, BadRequestException);

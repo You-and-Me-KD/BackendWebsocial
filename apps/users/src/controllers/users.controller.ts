@@ -1,15 +1,15 @@
+import { MICRO_SERVICE_KEYS, RegisterDto } from '@app/common';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { MICRO_SERVICE_KEYS, RegisterDto, AuthTokenDto } from '@app/common';
-import { UsersService } from '../services';
 import { GetUserDto } from '../dto';
+import { UsersService } from '../services';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @MessagePattern(MICRO_SERVICE_KEYS.USERS.REGISTER)
-  async register(@Payload() data: RegisterDto & { authTokens: AuthTokenDto }) {
+  async register(@Payload() data: RegisterDto) {
     return await this.usersService.register(data);
   }
 

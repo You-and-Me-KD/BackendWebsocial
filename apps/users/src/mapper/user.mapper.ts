@@ -36,7 +36,7 @@ export class UserMapper {
     user.isGetNewByMail = raw.isGetNewByMail;
     user.createdAt = raw.createdAt;
     user.updatedAt = raw.updatedAt;
-    user.authTokens = raw.authTokens;
+    // user.authTokens = raw.authTokens;
     return user;
   }
 

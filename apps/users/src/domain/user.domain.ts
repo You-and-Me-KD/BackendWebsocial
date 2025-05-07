@@ -305,5 +305,5 @@ export class UserDomain extends BaseDomain {
     description: 'List of auth tokens associated with the user',
     example: [],
   })
-  authTokens: AuthTokenDomain[];
+  authTokens?: AuthTokenDomain[];
 }

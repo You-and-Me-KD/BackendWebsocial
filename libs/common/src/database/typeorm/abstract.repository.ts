@@ -20,7 +20,6 @@ export abstract class AbstractRepository<
   protected abstract readonly logger: Logger;
   protected abstract toDomain(entity: TEntity): TDomain;
 
-  // Mapper từ Domain -> Entity (phải implement trong class con)
   protected abstract toPersistence(domain: TDomain): TEntity;
 
   constructor(protected readonly repository: Repository<TEntity>) {

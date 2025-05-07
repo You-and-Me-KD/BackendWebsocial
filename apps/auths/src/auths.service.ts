@@ -35,6 +35,10 @@ export class AuthsService {
           username,
         }),
       );
+      if (!user.isVerify) {
+        throw new UnauthorizedException('User not verify');
+      }
+
       const isMatchPassword = await bcryptjs.compare(
         password,
         user.hashedPassword,
@@ -69,19 +73,7 @@ export class AuthsService {
     const token = await this.generateToken(request);
     request['token'] = token;
     const user = await lastValueFrom(
-      this.userClient.send(MICRO_SERVICE_KEYS.USERS.REGISTER, {
-        ...data,
-        authTokens: {
-          token,
-          expiresAt: new Date(
-            new Date().getTime() +
-              (this.configService.get<number>('MAIL_EXPIRES_IN', {
-                infer: true,
-              }) || 3600) *
-                1000,
-          ),
-        },
-      }),
+      this.userClient.send(MICRO_SERVICE_KEYS.USERS.REGISTER, data),
     );
 
     await this.mailClient

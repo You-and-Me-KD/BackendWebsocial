@@ -214,5 +214,5 @@ export class UserEntity extends TypeOrmAbstractEntity {
     cascade: true,
     eager: true,
   })
-  authTokens: AuthTokenEntity[];
+  authTokens?: AuthTokenEntity[];
 }
