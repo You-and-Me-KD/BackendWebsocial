@@ -5,6 +5,7 @@ import {
   LoginDto,
   MAIL_SERVICE,
   MICRO_SERVICE_KEYS,
+  REDIS_CLIENT,
   RegisterDto,
   ResendEmailRegisterDto,
   UnauthorizedException,
@@ -20,12 +21,14 @@ import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
 import { TokenPayload } from './interface/token-payload.interface';
 import { VerifyTokenDto } from '@app/common/dto/verify-token.dto';
+import { RedisService } from '@app/common/redis/redis.services';
 
 @Injectable()
 export class AuthsService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @Inject(REDIS_CLIENT) private readonly redisServices: RedisService,
     @Inject(USERS_SERVICE) private readonly userClient: ClientProxy,
     @Inject(MAIL_SERVICE) private readonly mailClient: ClientProxy,
   ) {}
@@ -103,6 +106,19 @@ export class AuthsService {
 
   async sendMailRegister(data: ResendEmailRegisterDto) {
     try {
+      const key = 'verify_register_' + data.email;
+      const isExists = await this.redisServices.incr(key);
+      if (isExists === 1) {
+        await this.redisServices.expire(
+          key,
+          this.configService.get<number>('MAIL_EXPIRES_IN', {
+            infer: true,
+          }),
+        );
+      }
+      if (isExists > 3) {
+        throw new BadRequestException(ErrorCode.TOO_MANY_REQUESTS_SEND_EMAIL);
+      }
       const request: { email: string; token?: string } = {
         email: data.email,
       };

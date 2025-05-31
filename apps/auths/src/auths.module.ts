@@ -16,9 +16,11 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RedisModule } from '@app/common/redis/redis.module';
 
 @Module({
   imports: [
+    RedisModule,
     PassportModule,
     LoggerModule,
     ConfigModule.forRoot({
