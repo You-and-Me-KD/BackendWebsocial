@@ -11,7 +11,7 @@ import {
   Repository,
 } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
-import { NotFoundException } from '@app/common';
+import { ErrorCode, NotFoundException } from '@app/common';
 
 export abstract class AbstractRepository<
   TEntity extends AbstractEntity,
@@ -49,7 +49,7 @@ export abstract class AbstractRepository<
       this.logger.warn(
         `Entity not found with filter: ${JSON.stringify(filterQuery)}`,
       );
-      throw new NotFoundException('Entity not found');
+      throw new NotFoundException(ErrorCode.NOT_FOUND);
     }
     return this.toDomain(entity);
   }
@@ -63,7 +63,7 @@ export abstract class AbstractRepository<
       this.logger.warn(
         `Entity not found with filter: ${JSON.stringify(filterQuery)}`,
       );
-      throw new NotFoundException('Entity not found');
+      throw new NotFoundException(ErrorCode.NOT_FOUND);
     }
     this.repository.merge(entity, this.toPersistence(updateDomain as TDomain));
     const updatedEntity = await this.repository.save(entity);
@@ -83,7 +83,7 @@ export abstract class AbstractRepository<
       this.logger.warn(
         `Entity not found with filter: ${JSON.stringify(filterQuery)}`,
       );
-      throw new NotFoundException('Entity not found');
+      throw new NotFoundException(ErrorCode.NOT_FOUND);
     }
     await this.repository.softRemove(entity);
     return this.toDomain(entity);

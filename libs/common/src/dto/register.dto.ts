@@ -8,6 +8,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { ErrorCode } from '../exception';
 
 export class RegisterDto {
   @ApiProperty({
@@ -16,10 +17,16 @@ export class RegisterDto {
     required: true,
     example: 'john_doe',
   })
-  @IsString()
-  @Length(6, 20)
+  @IsString({
+    message: ErrorCode.USERNAME_MUST_BE_STRING,
+  })
+  @Length(6, 20, {
+    message: ErrorCode.USERNAME_LENGTH_BETWEEN_6_AND_20,
+  })
   @Transform(({ value }) => value.trim())
-  @Matches(/^[a-zA-Z0-9]+$/)
+  @Matches(/^[a-zA-Z0-9]+$/, {
+    message: ErrorCode.USERNAME_MUST_BE_ALPHANUMERIC,
+  })
   username: string;
 
   @ApiProperty({
@@ -28,7 +35,12 @@ export class RegisterDto {
     required: true,
     example: 'john_doe@gmail.com',
   })
-  @IsEmail()
+  @IsEmail(
+    {},
+    {
+      message: ErrorCode.MUST_BE_AN_EMAIL,
+    },
+  )
   email: string;
 
   @ApiProperty({
@@ -38,19 +50,16 @@ export class RegisterDto {
     example: 'password',
   })
   @IsString()
-  @MinLength(8, { message: 'Password must be at least 8 characters' })
+  @MinLength(8, { message: ErrorCode.MIN_LENGTH_8 })
   @Matches(/[A-Z]/, {
-    message: 'Password must contain at least one uppercase letter',
-  })
-  @Matches(/[A-Z]/, {
-    message: 'Password must contain at least one uppercase letter',
+    message: ErrorCode.AT_LEAST_ONE_UPPERCASE_LETTER,
   })
   @Matches(/[a-z]/, {
-    message: 'Password must contain at least one lowercase letter',
+    message: ErrorCode.AT_LEAST_ONE_LOWERCASE_LETTER,
   })
-  @Matches(/\d/, { message: 'Password must contain at least one number' })
+  @Matches(/\d/, { message: ErrorCode.AT_LEAST_ONE_NUMBER })
   @Matches(/[!@#$%^&*]/, {
-    message: 'Password must contain at least one special character (!@#$%^&*)',
+    message: ErrorCode.AT_LEAST_ONE_SPECIAL_CHARACTER,
   })
   password: string;
 

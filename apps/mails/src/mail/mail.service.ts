@@ -28,14 +28,13 @@ export class MailService {
           title: 'Verify your email address',
           url: `${this.configService.get('APP_URL', {
             infer: true,
-          })}/verify/${data.token}`,
+          })}/en/verify?token=${data.token}`,
         },
         to: data.email,
         subject: 'Verify your email address',
       });
       return true;
     } catch (error) {
-      console.error('Error sending email:', error);
       return false;
     }
   }

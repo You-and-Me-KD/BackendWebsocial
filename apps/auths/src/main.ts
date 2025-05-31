@@ -19,6 +19,11 @@ async function bootstrap() {
     },
   });
 
+  app.enableCors({
+    origin: configServices.get('CLIENT_URL'),
+    credentials: true,
+  });
+
   app.setGlobalPrefix(configServices.get('API_PREFIX') || 'api');
   setupSwagger(app, 'Auths', []);
   app.use(cookieParser());

@@ -6,6 +6,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
+import { ErrorCode } from '../exception';
 
 export class LoginDto {
   @ApiProperty({
@@ -33,19 +34,16 @@ export class LoginDto {
     example: 'password',
   })
   @IsString()
-  @MinLength(8, { message: 'Password must be at least 8 characters' })
+  @MinLength(8, { message: ErrorCode.MIN_LENGTH_8 })
   @Matches(/[A-Z]/, {
-    message: 'Password must contain at least one uppercase letter',
-  })
-  @Matches(/[A-Z]/, {
-    message: 'Password must contain at least one uppercase letter',
+    message: ErrorCode.AT_LEAST_ONE_UPPERCASE_LETTER,
   })
   @Matches(/[a-z]/, {
-    message: 'Password must contain at least one lowercase letter',
+    message: ErrorCode.AT_LEAST_ONE_LOWERCASE_LETTER,
   })
-  @Matches(/\d/, { message: 'Password must contain at least one number' })
+  @Matches(/\d/, { message: ErrorCode.AT_LEAST_ONE_NUMBER })
   @Matches(/[!@#$%^&*]/, {
-    message: 'Password must contain at least one special character (!@#$%^&*)',
+    message: ErrorCode.AT_LEAST_ONE_SPECIAL_CHARACTER,
   })
   password: string;
 }

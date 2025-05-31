@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ErrorCode,
   handleServiceException,
   RegisterDto,
   UnprocessableEntityException,
@@ -39,7 +40,9 @@ export class UsersService {
     } catch (err) {
       return;
     }
-    throw new UnprocessableEntityException('Email or username already exists');
+    throw new UnprocessableEntityException(
+      ErrorCode.EMAIL_USERNAME_ALREADY_EXISTS,
+    );
   }
 
   async findOne(@Payload() filterQuery: Partial<UserDomain>) {
@@ -63,7 +66,7 @@ export class UsersService {
       });
 
       if (user.isVerify) {
-        throw new UnprocessableEntityException('User already verified');
+        throw new UnprocessableEntityException(ErrorCode.USER_ALREADY_VERIFIED);
       }
 
       return await this.usersRepository.update({

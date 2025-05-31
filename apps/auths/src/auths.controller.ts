@@ -110,7 +110,7 @@ export class AuthsController {
     status: HttpStatus.OK,
     description: 'Return user information',
   })
-  @Post('resend-email-register')
+  @Post('resend-verification')
   async sendMailRegister(
     @Body()
     data: ResendEmailRegisterDto,

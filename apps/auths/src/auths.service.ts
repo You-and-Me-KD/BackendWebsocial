@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  ErrorCode,
+  handleServiceException,
   LoginDto,
   MAIL_SERVICE,
   MICRO_SERVICE_KEYS,
@@ -36,7 +38,7 @@ export class AuthsService {
         }),
       );
       if (!user.isVerify) {
-        throw new UnauthorizedException('User not verify');
+        throw new UnauthorizedException(ErrorCode.USER_NOT_VERIFY);
       }
 
       const isMatchPassword = await bcryptjs.compare(
@@ -44,7 +46,7 @@ export class AuthsService {
         user.hashedPassword,
       );
       if (!isMatchPassword) {
-        throw new UnauthorizedException('Credentials not match');
+        throw new UnauthorizedException(ErrorCode.CREDENTIAL_NOT_MATCH);
       }
       return user;
     } catch (error) {
@@ -95,7 +97,7 @@ export class AuthsService {
         }),
       );
     } catch (error) {
-      throw new BadRequestException(error);
+      handleServiceException(error.message, BadRequestException);
     }
   }
 
@@ -110,7 +112,7 @@ export class AuthsService {
         .send(MICRO_SERVICE_KEYS.MAILS.VERIFY_REGISTER, request)
         .forEach(() => {});
     } catch (error) {
-      throw new BadRequestException(error);
+      handleServiceException(error, BadRequestException);
     }
   }
 
