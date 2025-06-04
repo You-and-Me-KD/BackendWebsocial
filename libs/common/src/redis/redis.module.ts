@@ -15,7 +15,6 @@ import { REDIS_CLIENT } from '../constants';
       useFactory: (configService: ConfigService) => {
         const redisHost = configService.get<string>('REDIS_HOST', 'localhost');
         const redisPort = configService.get<number>('REDIS_PORT', 6379);
-        console.log(redisHost, redisPort);
         return new Redis({
           host: redisHost,
           port: redisPort,

@@ -4,6 +4,7 @@ import {
   MICRO_SERVICE_KEYS,
   RegisterDto,
   ResendEmailRegisterDto,
+  ResendForgotPasswordDto,
 } from '@app/common';
 import {
   Body,
@@ -24,6 +25,7 @@ import { LocalAuthGuard } from './guard/local-auth.guard';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 import { VerifyTokenDto } from '@app/common/dto/verify-token.dto';
+import { ResetPasswordDto } from '@app/common/dto/reset-password.dto';
 
 @Controller('auths')
 export class AuthsController {
@@ -108,7 +110,6 @@ export class AuthsController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return user information',
   })
   @Post('resend-verification')
   async sendMailRegister(
@@ -116,5 +117,36 @@ export class AuthsController {
     data: ResendEmailRegisterDto,
   ) {
     return this.authsService.sendMailRegister(data);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Resend forgot password email',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+  })
+  @Post('forgot-password')
+  async sendMailForgotPassword(
+    @Body()
+    data: ResendForgotPasswordDto,
+  ) {
+    return this.authsService.forgotPassword(data);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    description: 'Reset password',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return success message',
+  })
+  @Post('reset-password')
+  async resetPassword(
+    @Body()
+    data: ResetPasswordDto,
+  ) {
+    return this.authsService.resetPassword(data);
   }
 }

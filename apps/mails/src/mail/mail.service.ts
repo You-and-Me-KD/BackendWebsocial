@@ -38,4 +38,23 @@ export class MailService {
       return false;
     }
   }
+
+  async sendForgotPassword(data: VerifyRegisterDto): Promise<boolean> {
+    try {
+      await this.mailer.sendMail({
+        templatePath: path.join(this.emailDir, 'forgot-password.hbs'),
+        context: {
+          title: 'Forgot Password',
+          url: `${this.configService.get('APP_URL', {
+            infer: true,
+          })}/en/forgot-password?token=${data.token}`,
+        },
+        to: data.email,
+        subject: 'Forgot Password',
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

@@ -29,8 +29,8 @@ import { RedisModule } from '@app/common/redis/redis.module';
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
-        MAIL_SECRET: Joi.string().required(),
-        MAIL_EXPIRES_IN: Joi.string().required(),
+        VERIFY_MAIL_SECRET: Joi.string().required(),
+        VERIFY_MAIL_EXPIRES_IN: Joi.string().required(),
         TCP_PORT: Joi.number().required(),
         HTTP_PORT: Joi.number().required(),
         USER_HOST: Joi.string().required(),

@@ -8,6 +8,7 @@ import {
   REDIS_CLIENT,
   RegisterDto,
   ResendEmailRegisterDto,
+  ResendForgotPasswordDto,
   UnauthorizedException,
   USERS_SERVICE,
 } from '@app/common';
@@ -22,6 +23,7 @@ import { lastValueFrom } from 'rxjs';
 import { TokenPayload } from './interface/token-payload.interface';
 import { VerifyTokenDto } from '@app/common/dto/verify-token.dto';
 import { RedisService } from '@app/common/redis/redis.services';
+import { ResetPasswordDto } from '@app/common/dto/reset-password.dto';
 
 @Injectable()
 export class AuthsService {
@@ -75,7 +77,10 @@ export class AuthsService {
     const request: { email: string; token?: string } = {
       email: data.email,
     };
-    const token = await this.generateToken(request);
+    const token = await this.generateToken({
+      ...request,
+      type: 'verify',
+    });
     request['token'] = token;
     const user = await lastValueFrom(
       this.userClient.send(MICRO_SERVICE_KEYS.USERS.REGISTER, data),
@@ -90,7 +95,7 @@ export class AuthsService {
   async verifyToken(data: VerifyTokenDto) {
     try {
       const verify = await this.jwtService.verifyAsync(data.token, {
-        secret: this.configService.get<string>('MAIL_SECRET', {
+        secret: this.configService.get<string>('VERIFY_MAIL_SECRET', {
           infer: true,
         }),
       });
@@ -111,7 +116,7 @@ export class AuthsService {
       if (isExists === 1) {
         await this.redisServices.expire(
           key,
-          this.configService.get<number>('MAIL_EXPIRES_IN', {
+          this.configService.get<number>('VERIFY_MAIL_EXPIRES_IN', {
             infer: true,
           }),
         );
@@ -122,27 +127,101 @@ export class AuthsService {
       const request: { email: string; token?: string } = {
         email: data.email,
       };
-      const token = await this.generateToken(data);
+      const token = await this.generateToken({
+        ...data,
+        type: 'verify',
+      });
       request['token'] = token;
       await this.mailClient
         .send(MICRO_SERVICE_KEYS.MAILS.VERIFY_REGISTER, request)
         .forEach(() => {});
     } catch (error) {
-      handleServiceException(error, BadRequestException);
+      handleServiceException(error.message, BadRequestException);
     }
   }
 
-  async generateToken(data: { email: string }) {
+  async generateToken(data: { email: string; type: 'verify' | 'forgot' }) {
+    const secretKey =
+      data.type === 'verify'
+        ? this.configService.get<string>('VERIFY_MAIL_SECRET', { infer: true })
+        : this.configService.get<string>('FORGOT_PASSWORD_SECRET', {
+            infer: true,
+          });
+    const expiresIn =
+      data.type === 'verify'
+        ? this.configService.get<string>('VERIFY_MAIL_EXPIRES_IN', {
+            infer: true,
+          })
+        : this.configService.get<string>('FORGOT_PASSWORD_EXPIRES_IN', {
+            infer: true,
+          });
     return await this.jwtService.signAsync(
       { email: data.email },
       {
-        secret: this.configService.get<string>('MAIL_SECRET', {
-          infer: true,
-        }),
-        expiresIn: `${this.configService.get<string>('MAIL_EXPIRES_IN', {
-          infer: true,
-        })}s`,
+        secret: secretKey,
+        expiresIn: `${expiresIn}s`,
       },
     );
+  }
+
+  async forgotPassword(data: ResendForgotPasswordDto) {
+    const email = data.email;
+
+    try {
+      const user = await lastValueFrom(
+        this.userClient.send(MICRO_SERVICE_KEYS.USERS.FIND_ONE_USER, {
+          email,
+        }),
+      );
+      if (!user) {
+        throw new BadRequestException(ErrorCode.NOT_FOUND);
+      }
+      const key = 'forgot_password' + data.email;
+      const isExists = await this.redisServices.incr(key);
+      if (isExists === 1) {
+        await this.redisServices.expire(
+          key,
+          this.configService.get<number>('FORGOT_PASSWORD_EXPIRES_IN', {
+            infer: true,
+          }),
+        );
+      }
+      if (isExists > 3) {
+        throw new BadRequestException(ErrorCode.TOO_MANY_REQUESTS_SEND_EMAIL);
+      }
+      const token = await this.generateToken({ email, type: 'forgot' });
+      const request = { email, token };
+      await this.mailClient
+        .send(MICRO_SERVICE_KEYS.MAILS.FORGOT_PASSWORD, request)
+        .forEach(() => {});
+    } catch (error) {
+      handleServiceException(error.message, BadRequestException);
+    }
+  }
+  async resetPassword(data: ResetPasswordDto) {
+    const { newPassword, token } = data;
+    try {
+      const verify = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('FORGOT_PASSWORD_SECRET', {
+          infer: true,
+        }),
+      });
+      const user = await lastValueFrom(
+        this.userClient.send(MICRO_SERVICE_KEYS.USERS.FIND_ONE_USER, {
+          email: verify.email,
+        }),
+      );
+      if (!user) {
+        throw new BadRequestException(ErrorCode.NOT_FOUND);
+      }
+      return await lastValueFrom(
+        this.userClient.send(MICRO_SERVICE_KEYS.USERS.RESET_PASSWORD, {
+          ...user,
+          password: newPassword,
+        }),
+      );
+    } catch (error) {
+      handleServiceException(error.message, BadRequestException);
+    }
   }
 }

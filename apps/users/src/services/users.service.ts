@@ -25,7 +25,7 @@ export class UsersService {
         hashedPassword,
       });
     } catch (error) {
-      handleServiceException(error, BadRequestException);
+      handleServiceException(error.message, BadRequestException);
     }
   }
 
@@ -74,7 +74,26 @@ export class UsersService {
         isVerify: true,
       });
     } catch (error) {
-      handleServiceException(error, BadRequestException);
+      handleServiceException(error.message, BadRequestException);
+    }
+  }
+
+  async resetPassword(data: { email: string; password: string }) {
+    const { email, password } = data;
+    try {
+      const hashedPassword = await bcryptjs.hash(password, 10);
+      return await this.usersRepository.findOneAndUpdate(
+        {
+          where: {
+            email,
+          },
+        },
+        {
+          hashedPassword,
+        },
+      );
+    } catch (error) {
+      handleServiceException(error.message, BadRequestException);
     }
   }
 }

@@ -27,4 +27,9 @@ export class UsersController {
   async verifyToken(@Payload() data: { email: string }) {
     return await this.usersService.verifyToken(data);
   }
+
+  @MessagePattern(MICRO_SERVICE_KEYS.USERS.RESET_PASSWORD)
+  async resetPassword(@Payload() data: { email: string; password: string }) {
+    return await this.usersService.resetPassword(data);
+  }
 }
