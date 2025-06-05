@@ -28,7 +28,7 @@ export class MailService {
           title: 'Verify your email address',
           url: `${this.configService.get('APP_URL', {
             infer: true,
-          })}/en/verify?token=${data.token}`,
+          })}/verify?token=${data.token}`,
         },
         to: data.email,
         subject: 'Verify your email address',
@@ -47,7 +47,7 @@ export class MailService {
           title: 'Forgot Password',
           url: `${this.configService.get('APP_URL', {
             infer: true,
-          })}/en/forgot-password?token=${data.token}`,
+          })}/?tab=reset-password&token=${data.token}`,
         },
         to: data.email,
         subject: 'Forgot Password',
