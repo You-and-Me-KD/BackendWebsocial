@@ -17,11 +17,14 @@ import { MailerService } from './mailer.service';
         MAIL_SECURE: Joi.boolean().default(true),
         APP_URL: Joi.string().required(),
         TCP_PORT: Joi.number().required(),
+        MAIL_SERVICE: Joi.string().optional(),
+        MAIL_IGNORE_TLS: Joi.boolean().default(false),
+        MAIL_REQUIRE_TLS: Joi.boolean().default(false),
       }),
     }),
   ],
   controllers: [],
   exports: [MailerService],
-  providers: [MailerModule, MailerService],
+  providers: [MailerService],
 })
 export class MailerModule {}
