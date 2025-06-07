@@ -9,17 +9,7 @@ export class MailerService {
   private readonly transporter: Nodemailer.Transporter;
   constructor(private readonly configService: ConfigService) {
     this.transporter = Nodemailer.createTransport({
-      // host: this.configService.get<string>('MAIL_HOST', { infer: true }),
-      // port: this.configService.get<number>('MAIL_PORT', { infer: true }),
-      // secure: this.configService.get<boolean>('MAIL_SECURE', { infer: true }),
       service: this.configService.get<string>('MAIL_SERVICE', { infer: true }),
-      // just for mail dev
-      // ignoreTLS: this.configService.get<boolean>('MAIL_IGNORE_TLS', {
-      //   infer: true,
-      // }),
-      // requireTLS: this.configService.get<boolean>('MAIL_REQUIRE_TLS', {
-      //   infer: true,
-      // }),
       auth: {
         user: this.configService.get<string>('MAIL_USER', { infer: true }),
         pass: this.configService.get<string>('MAIL_PASSWORD', { infer: true }),
