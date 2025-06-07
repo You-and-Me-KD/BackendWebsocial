@@ -26,7 +26,7 @@ export class MailService {
         templatePath: path.join(this.emailDir, 'verify-register.hbs'),
         context: {
           title: 'Verify your email address',
-          url: `${this.configService.get('APP_URL', {
+          url: `${this.configService.get<string>('APP_URL', {
             infer: true,
           })}/verify?token=${data.token}`,
         },
@@ -45,7 +45,7 @@ export class MailService {
         templatePath: path.join(this.emailDir, 'forgot-password.hbs'),
         context: {
           title: 'Forgot Password',
-          url: `${this.configService.get('APP_URL', {
+          url: `${this.configService.get<string>('APP_URL', {
             infer: true,
           })}/?tab=reset-password&token=${data.token}`,
         },
