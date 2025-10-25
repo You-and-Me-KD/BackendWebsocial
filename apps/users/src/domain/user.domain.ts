@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { MARITIAL_ENUM } from '../enums';
+import { MARITIAL_ENUM, USER_ROLE } from '../enums';
 import { BaseDomain } from '@app/common/domain';
 import { AuthTokenDomain } from './auth-token.domain';
 
@@ -306,4 +306,12 @@ export class UserDomain extends BaseDomain {
     example: [],
   })
   authTokens?: AuthTokenDomain[];
+
+  @ApiProperty({
+    type: String,
+    example: USER_ROLE.USER,
+    description: 'Role of the user',
+    enum: USER_ROLE,
+  })
+  role: USER_ROLE;
 }

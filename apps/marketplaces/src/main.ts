@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { MarketplaceModule } from './marketplaces.module';
+import { MarketplaceModule } from './modules/marketplaces.module';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';

@@ -60,7 +60,11 @@ export class AuthsService {
   }
 
   async login(user: UserDomain, response: Response) {
-    const tokenPayload: TokenPayload = { id: user.id, email: user.email };
+    const tokenPayload: TokenPayload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
     const expires = new Date();
     expires.setSeconds(
       expires.getSeconds() +

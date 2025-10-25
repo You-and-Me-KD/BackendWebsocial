@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { MarketplaceModule } from '../src/marketplaces.module';
+import { MarketplaceModule } from '../src/modules/marketplaces.module';
 
 describe('MarketplaceController (e2e)', () => {
   let app: INestApplication;

@@ -1,6 +1,6 @@
 import { TypeOrmAbstractEntity } from '@app/common';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
-import { MARITIAL_ENUM } from '../enums';
+import { MARITIAL_ENUM, USER_ROLE } from '../enums';
 import { UserPermissionEntity } from './user-permission.entity';
 import { UserSocialEntity } from './user-social.entity';
 import { SecurityInfoEntity } from './security-info.entity';
@@ -141,6 +141,14 @@ export class UserEntity extends TypeOrmAbstractEntity {
 
   @Column({ type: 'boolean', default: false })
   isVerify?: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: USER_ROLE,
+    default: USER_ROLE.USER,
+    enumName: 'user_role',
+  })
+  role: USER_ROLE;
 
   @OneToOne(
     () => UserPermissionEntity,

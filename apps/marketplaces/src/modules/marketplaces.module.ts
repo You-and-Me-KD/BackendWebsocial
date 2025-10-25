@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MarketplacesController } from './marketplaces.controller';
-import { MarketplacesService } from './marketplaces.service';
+import { MarketplacesService } from '../services/marketplaces.service';
 import {
+  AUTH_SERVICE,
   DatabaseModule,
   ExceptionFilter,
   LoggerInterceptor,
@@ -16,10 +16,14 @@ import {
   ProductLikeEntity,
   ProductReviewEntity,
   TransactionEntity,
-} from './entities';
-import { ConfigModule } from '@nestjs/config';
+} from '../entities';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { CategoryController, MarketplacesController } from '../controllers';
+import { CategoryService } from '../services/category.services';
+import { CategoryRepository } from '../repositories';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -52,10 +56,25 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
         API_PREFIX: Joi.string().default('api'),
       }),
     }),
+    ClientsModule.registerAsync([
+      {
+        name: AUTH_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
-  controllers: [MarketplacesController],
+  controllers: [MarketplacesController, CategoryController],
   providers: [
     MarketplacesService,
+    CategoryService,
+    CategoryRepository,
     {
       provide: APP_FILTER,
       useClass: ExceptionFilter,

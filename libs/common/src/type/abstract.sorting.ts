@@ -1,8 +1,12 @@
 import { FindManyOptions, FindOptionsOrder } from 'typeorm';
 
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
 export interface SortOptions<T> {
   orderBy?: keyof T;
-  orderDirection?: 'ASC' | 'DESC';
+  orderDirection?: SortDirection;
 }
 
 export abstract class AbstractSorting<T> {
@@ -10,7 +14,7 @@ export abstract class AbstractSorting<T> {
     if (options.orderBy) {
       return {
         order: {
-          [options.orderBy]: options.orderDirection || 'ASC',
+          [options.orderBy]: options.orderDirection || SortDirection.ASC,
         } as FindOptionsOrder<T>,
       };
     }

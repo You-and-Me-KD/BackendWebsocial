@@ -11,6 +11,7 @@ import * as bcryptjs from 'bcryptjs';
 import { UserDomain } from '../domain';
 import { GetUserDto } from '../dto';
 import { UsersRepository } from '../repositories/users.repository';
+import { USER_ROLE } from '../enums';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,7 @@ export class UsersService {
       return await this.usersRepository.create({
         ...data,
         hashedPassword,
+        role: USER_ROLE.USER,
       });
     } catch (error) {
       handleServiceException(error.message, BadRequestException);

@@ -1,4 +1,8 @@
 export * from './database/database.module';
+export * from './auth/jwt-auth.guard';
+export * from './auth/admin.guard';
+export * from './auth/roles.guard';
+export * from './decorator/roles.decorator';
 export { AbstractRepository as TypeOrmAbstractRepository } from './database/typeorm/abstract.repository';
 export { AbstractRepository as MongooseAbstractRepository } from './database/mongoose/abstract.repository';
 export { AbstractEntity as TypeOrmAbstractEntity } from './database/typeorm/abstract.entity';
